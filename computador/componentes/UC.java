@@ -4,7 +4,7 @@ import computador.conexao.ConexaoBinaria;
 
 /**
  *
- * @since 31-05-2018
+ * Data: 31-05-2018
  */
 public class UC {
     

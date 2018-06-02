@@ -1,10 +1,12 @@
 package computador.conexao;
 
+import computador.Teste;
+
 /**
  * Cada instancia desta classe representa uma conexao entre dois vetores bidimensionais
  * de inteiros que representam um numero binario.
  * 
- * @since 31-05-2018
+ * Data: 31-05-2018
  */
 public class ConexaoBinaria {
     
@@ -16,10 +18,15 @@ public class ConexaoBinaria {
     
     private int diferenca;
     
-    /*
-      Setter para a variavel origem. Retorna true caso seja possivel definir uma
-      origem, ou false caso nao seja.
-    */
+    
+    
+    /**
+     * Define um vetor de inteiros como origem da conexao
+     * 
+     * @param origem Vetor de inteiros
+     * @return 'true' caso seja possivel definir o vetor de inteiros como origem,
+     *         ou 'false' caso nao seja.
+     */
     public boolean definirOrigem(int[] origem) {
         if(origem == null) return false;
         
@@ -37,10 +44,13 @@ public class ConexaoBinaria {
         return true;
     }
     
-    /*
-      Setter para a variavel origem. Retorna true caso seja possivel definir uma
-      origem, ou false caso nao seja.
-    */
+    /**
+     * Define um conjunto de vetores de inteiro como a origem da conexao.
+     * 
+     * @param origem Vetor bidimensional de inteiros
+     * @return 'true' caso seja possivel definir os vetores de inteiros como origem,
+     *         ou 'false' caso nao seja.
+     */
     public boolean definirOrigem(int[][] origem) {
         if(origem == null) return false;
         
@@ -55,18 +65,23 @@ public class ConexaoBinaria {
             this.diferenca = this.tamanhoDestino - tamanhoOrigem;
         }
         
-        this.origem = new int[origem.length][];
+        /*this.origem = new int[origem.length][];
         for(int i = 0; i < origem.length; i++)
-            this.origem[i] = origem[i];
+            this.origem[i] = origem[i];*/
+        
+        this.origem = origem;
         this.tamanhoOrigem = tamanhoOrigem;
         
         return true;
     }
     
-    /*
-      Setter para a variavel destino. Retorna true caso seja possivel definir um
-      destino, ou false caso nao seja.
-    */
+    /**
+     * Define um vetor de inteiros como destino da conexao
+     * 
+     * @param destino Vetor bidimensional de inteiros
+     * @return 'true' caso seja possivel definir o vetor de inteiros como destino,
+     *         ou 'false' caso nao seja.
+     */
     public boolean definirDestino(int[] destino) {
         if(destino == null) return false;
         
@@ -84,10 +99,13 @@ public class ConexaoBinaria {
         return true;
     }
    
-    /*
-      Setter para a variavel destino. Retorna true caso seja possivel definir um
-      destino, ou false caso nao seja.
-    */
+    /**
+     * Define um conjunto de vetores de inteiro como a destino da conexao.
+     * 
+     * @param destino Vetor bidimensional de inteiros
+     * @return 'true' caso seja possivel definir o vetor de inteiros como destino,
+     *         ou 'false' caso nao seja
+     */
     public boolean definirDestino(int[][] destino) {
         if(destino == null) return false;
         
@@ -102,22 +120,27 @@ public class ConexaoBinaria {
             this.diferenca = tamanhoDestino - this.tamanhoOrigem;
         } 
         
-        this.destino = new int[destino.length][];
+        /*this.destino = new int[destino.length][];
         for(int i = 0; i < destino.length; i++)
-            this.destino[i] = destino[i];
+            this.destino[i] = destino[i];*/
+        
+        this.destino = destino;
         this.tamanhoDestino = destino.length;
         
         return true;
     }
     
-    /*
-      Quando a conexao eh aberta o conteudo de 'origem' eh copiado para 'destino'.
-      Caso o destino tenha um tamanho maior do que a origem, os espacos restantes
-      sao preenchidos com o ultimo bit da 'origem', pois assim a propriedade de
-      complemento de dois eh mantida.
-      Quando o destino ou a origem (ou ambos) eh formada por vetores, entao a copia
-      do conteudo eh feita como se todos os vetores fossem um so.
-    */
+    /**
+     * Quando a conexao eh aberta o conteudo de 'origem' eh copiado para 'destino'.
+     * Caso o destino tenha um tamanho maior do que a origem, os espacos restantes
+     * sao preenchidos com o ultimo bit da 'origem', pois assim a propriedade de
+     * complemento de dois eh mantida.
+     * Quando o destino ou a origem (ou ambos) eh formada por vetores, entao a copia
+     * do conteudo eh feita como se todos os vetores fossem um so.
+     * 
+     * @return 'true' caso seja possivel fazer a abertura da conexao ou 'false'
+     *         caso nao seja.
+     */
     public boolean abrir() {
         if(this.origem == null || this.destino == null) return false;
         
@@ -131,7 +154,7 @@ public class ConexaoBinaria {
             
             // Copia bit a bit
             while(j >= 0 && m >= 0)
-                this.destino[i][j--] = this.origem[j][m--];
+                this.destino[i][j--] = this.origem[l][m--];
             
             // Passa para o proximo vetor do destino, caso necessario
             if(j < 0) {
@@ -147,6 +170,8 @@ public class ConexaoBinaria {
             
         }
         
+        
+        
         /* 
           O destino eh sempre maior ou igual a origem, assim os bits da origem
           sempre acabarao ao mesmo tempo ou antes do que os espacos do destino.
@@ -157,7 +182,7 @@ public class ConexaoBinaria {
         while(i >= 0) {
             
             while(j >= 0)
-                this.destino[i][j] = this.origem[0][0];
+                this.destino[i][j--] = this.origem[0][0];
             
             i--;
             if(i >= 0) j = this.destino[i].length - 1;
@@ -179,9 +204,11 @@ public class ConexaoBinaria {
         return true;
     }
     
-    /*
-      Uma conexao eh valida se tanto o 'destino' quanto a 'origem' forem nao nulos.
-    */
+    /**
+     * Retorna se uma conexao eh valida ou nao. Uma conexao eh valida se tanto o
+     * 'destino' quanto a 'origem' forem nao nulos.
+     * @return 'true' caso seja valida ou 'false' caso nao seja
+     */
     public boolean valida() {
         return (this.origem != null && this.destino != null);
     }
