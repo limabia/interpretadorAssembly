@@ -16,8 +16,20 @@ public class ConexaoBinaria {
     private int tamanhoOrigem;
     private int tamanhoDestino;
     
-    private int diferenca;
+    private boolean complementoDeDois;
     
+    
+    
+    /**
+     * Define se a conexao trasnferir binarios em complemento de dois ou nao
+     * 
+     * @param complementoDeDois Se os binarios estao em complemento de dois ou sao
+     *                          nao negativos.
+     */
+    public ConexaoBinaria(boolean complementoDeDois) {
+        this.complementoDeDois = complementoDeDois;
+    }
+  
     
     
     /**
@@ -33,8 +45,6 @@ public class ConexaoBinaria {
         if(this.destino != null) {
             if(origem.length > tamanhoDestino)
                 return false;
-        
-            this.diferenca = this.tamanhoDestino - origem.length;
         }
         
         this.origem = new int[1][];
@@ -61,8 +71,6 @@ public class ConexaoBinaria {
         if(this.destino != null) {
             if(tamanhoOrigem > this.tamanhoDestino)
                 return false;
-            
-            this.diferenca = this.tamanhoDestino - tamanhoOrigem;
         }
         
         /*this.origem = new int[origem.length][];
@@ -88,8 +96,6 @@ public class ConexaoBinaria {
         if(this.origem != null) {
             if(destino.length < this.tamanhoOrigem)
                 return false;
-        
-            this.diferenca = destino.length - this.tamanhoOrigem;
         }
         
         this.destino = new int[1][];
@@ -116,8 +122,6 @@ public class ConexaoBinaria {
         if(this.origem != null) {
             if(tamanhoDestino < this.tamanhoOrigem)
                 return false;
-            
-            this.diferenca = tamanhoDestino - this.tamanhoOrigem;
         } 
         
         /*this.destino = new int[destino.length][];
@@ -176,16 +180,25 @@ public class ConexaoBinaria {
           O destino eh sempre maior ou igual a origem, assim os bits da origem
           sempre acabarao ao mesmo tempo ou antes do que os espacos do destino.
           Dessa forma, caso haja espaco no destino com a origem esgotava, o ultimo
-          bit da origem (indice 0) eh copiado para os restantes do destino. Isso
-          mantem a propriedade de complmento de dois.
+          bit da origem (indice 0) eh copiado para os restantes do destino, caso
+          seja complemento de dois. Caso nao seja, o valor copiado eh zero.
         */
-        while(i >= 0) {
-            
-            while(j >= 0)
-                this.destino[i][j--] = this.origem[0][0];
-            
-            i--;
-            if(i >= 0) j = this.destino[i].length - 1;
+        if(this.complementoDeDois) {
+            while(i >= 0) {
+                while(j >= 0)
+                    this.destino[i][j--] = this.origem[0][0];
+
+                i--;
+                if(i >= 0) j = this.destino[i].length - 1;
+            }
+        } else {
+            while(i >= 0) {
+                while(j >= 0)
+                    this.destino[i][j--] = 0;
+
+                i--;
+                if(i >= 0) j = this.destino[i].length - 1;
+            }
         }
         
         
@@ -207,6 +220,7 @@ public class ConexaoBinaria {
     /**
      * Retorna se uma conexao eh valida ou nao. Uma conexao eh valida se tanto o
      * 'destino' quanto a 'origem' forem nao nulos.
+     * 
      * @return 'true' caso seja valida ou 'false' caso nao seja
      */
     public boolean valida() {
