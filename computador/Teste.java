@@ -21,8 +21,8 @@ public class Teste {
         Barramento barramento = new Barramento(8);
         
         Registrador A = new Registrador(8);
-        ConexaoBinaria a_bar = new ConexaoBinaria();
-        ConexaoBinaria bar_a = new ConexaoBinaria();
+        ConexaoBinaria a_bar = new ConexaoBinaria(true);
+        ConexaoBinaria bar_a = new ConexaoBinaria(true);
         {            
             // A ----> Barramento
             A.definirComoOrigem(a_bar);            
@@ -34,8 +34,8 @@ public class Teste {
         }
     
         Registrador B = new Registrador(8);
-        ConexaoBinaria b_bar = new ConexaoBinaria();
-        ConexaoBinaria bar_b = new ConexaoBinaria();        
+        ConexaoBinaria b_bar = new ConexaoBinaria(true);
+        ConexaoBinaria bar_b = new ConexaoBinaria(true);        
         {   
             // B ----> Barramento
             B.definirComoOrigem(b_bar);            
@@ -47,14 +47,14 @@ public class Teste {
         }
         
         Registrador C = new Registrador(4, 4);
-        ConexaoBinaria c_bar = new ConexaoBinaria();
-        ConexaoBinaria bar_c = new ConexaoBinaria();
+        ConexaoBinaria c_bar = new ConexaoBinaria(true);
+        ConexaoBinaria bar_c = new ConexaoBinaria(true);
         
-        ConexaoBinaria c1_bar = new ConexaoBinaria();
-        ConexaoBinaria bar_c1 = new ConexaoBinaria();
+        ConexaoBinaria c1_bar = new ConexaoBinaria(true); // altere para true e veja o valor de A
+        ConexaoBinaria bar_c1 = new ConexaoBinaria(true);
         
-        ConexaoBinaria c2_bar = new ConexaoBinaria();
-        ConexaoBinaria bar_c2 = new ConexaoBinaria();
+        ConexaoBinaria c2_bar = new ConexaoBinaria(true);
+        ConexaoBinaria bar_c2 = new ConexaoBinaria(true);
         {
             // C ----> Barramento
             C.definirComoOrigem(c_bar);            
@@ -84,8 +84,8 @@ public class Teste {
         Barramento barramentoExterno = new Barramento(8);
         
         RAM RAM = new RAM(8, 0, 255);
-        ConexaoBinaria ram_barEx = new ConexaoBinaria();
-        ConexaoBinaria barEx_ram = new ConexaoBinaria();
+        ConexaoBinaria ram_barEx = new ConexaoBinaria(true);
+        ConexaoBinaria barEx_ram = new ConexaoBinaria(true);
         {
             // RAM(buffer) ----> Barramento Externo
             RAM.definirComoOrigem(ram_barEx);
@@ -97,8 +97,8 @@ public class Teste {
         }
         
         Registrador MAR  = new Registrador(8);
-        ConexaoBinaria bar_mar = new ConexaoBinaria();
-        ConexaoBinaria mar_barEx = new ConexaoBinaria();
+        ConexaoBinaria bar_mar = new ConexaoBinaria(true);
+        ConexaoBinaria mar_barEx = new ConexaoBinaria(true);
         {
             // Barramento ----> MAR
             barramento.definirComoOrigem(bar_mar);
@@ -110,10 +110,10 @@ public class Teste {
         }
         
         Registrador MBR  = new Registrador(8);
-        ConexaoBinaria mbr_bar = new ConexaoBinaria();
-        ConexaoBinaria bar_mbr = new ConexaoBinaria();
-        ConexaoBinaria mbr_barEx = new ConexaoBinaria();
-        ConexaoBinaria barEx_mbr = new ConexaoBinaria();
+        ConexaoBinaria mbr_bar = new ConexaoBinaria(true);
+        ConexaoBinaria bar_mbr = new ConexaoBinaria(true);
+        ConexaoBinaria mbr_barEx = new ConexaoBinaria(true);
+        ConexaoBinaria barEx_mbr = new ConexaoBinaria(true);
         {
             // MBR ----> Barramento
             MBR.definirComoDestino(mbr_bar);
