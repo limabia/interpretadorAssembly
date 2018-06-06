@@ -15,9 +15,12 @@ public class Registrador implements Conectavel {
     // Tamanho total do registrador (soma do tamanho de suas particoes)
     private final int TAMANHO;
     
+    // Numero de particoes do registrador
+    private final int NUMERO_PARTICOES;
+    
     // Representacao do registrador com suas particoes
     private int[][] binario;
-    
+
     
     
     /**
@@ -29,6 +32,7 @@ public class Registrador implements Conectavel {
     public Registrador(int tamanho) {
         this.binario = new int[1][tamanho];
         this.TAMANHO = tamanho;
+        this.NUMERO_PARTICOES = 1;
     }
     
     /**
@@ -47,6 +51,7 @@ public class Registrador implements Conectavel {
         }
         
         this.TAMANHO = tamanho;
+        this.NUMERO_PARTICOES = tamanhos.length;
     }
     
     
@@ -60,6 +65,15 @@ public class Registrador implements Conectavel {
      */
     public int obterTamanho() {
         return this.TAMANHO;
+    }
+    
+    /**
+     * Retorna o numero de particoes do Registrador
+     * 
+     * @return numero de particoes do Registrador
+     */
+    public int obterNumeroParticoes() {
+        return this.NUMERO_PARTICOES;
     }
     
     /**
