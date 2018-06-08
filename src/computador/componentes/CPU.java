@@ -24,18 +24,15 @@ public class CPU {
     // Se comunicam com o barramento externo
     Registrador MAR, MBR;
     
-    public CPU(int tamanhoBarramento, int tamanhoRegistrador, int tamanhoOP, 
-            int tamanhoParametro1, int tamanhoParametro2, Barramento barramentoExterno,
-            RAM RAM, ULA ULA) {
-    
-        this.UC = new UC(RAM, ULA);
+    public CPU(int tamanhoPalavra, int tamanhoOP, int tamanhoParametro1,
+            int tamanhoParametro2, Barramento barramentoExterno, RAM RAM) {
         
-        this.barramento = new Barramento(tamanhoBarramento);
+        this.barramento = new Barramento(tamanhoPalavra);
         
         /* ######################### REGISTRADORES ######################### */
         
         // AX
-        this.AX = new Registrador(tamanhoRegistrador);
+        this.AX = new Registrador(tamanhoPalavra);
         {
             // AX --(00)--> Barramento
             this.AX.definirComoOrigem(UC.obterConexao(1));            
@@ -47,7 +44,7 @@ public class CPU {
         }
         
         // BX
-        this.BX = new Registrador(tamanhoRegistrador);
+        this.BX = new Registrador(tamanhoPalavra);
         {
             // BX --(00)--> Barramento
             this.BX.definirComoOrigem(UC.obterConexao(1));            
@@ -59,7 +56,7 @@ public class CPU {
         }
         
         // CX
-        this.CX = new Registrador(tamanhoRegistrador);
+        this.CX = new Registrador(tamanhoPalavra);
         {
             // CX --(00)--> Barramento
             this.CX.definirComoOrigem(UC.obterConexao(1));
@@ -71,7 +68,7 @@ public class CPU {
         }
  
         // DX
-        this.DX = new Registrador(tamanhoRegistrador);
+        this.DX = new Registrador(tamanhoPalavra);
         {
             // DX --(00)--> Barramento
             this.DX.definirComoOrigem(UC.obterConexao(1));            
@@ -113,7 +110,7 @@ public class CPU {
         
         
         // PC
-        this.PC = new Registrador(tamanhoRegistrador);
+        this.PC = new Registrador(tamanhoPalavra);
         {
             // PC --(00)--> Barramento
             this.PC.definirComoOrigem(UC.obterConexao(1));            
@@ -126,7 +123,7 @@ public class CPU {
         
         
         // T
-        this.T = new Registrador(tamanhoRegistrador);
+        this.T = new Registrador(tamanhoPalavra);
         {
             // T --(00)--> Barramento
             this.T.definirComoOrigem(UC.obterConexao(1));            
@@ -139,7 +136,7 @@ public class CPU {
         
         
         // AC
-        this.AC = new Registrador(tamanhoRegistrador, tamanhoRegistrador);
+        this.AC = new Registrador(tamanhoPalavra, tamanhoPalavra);
         {
             // (AC)P1 --(00)--> Barramento
             this.AC.definirComoOrigem(UC.obterConexao(1), 0);            
@@ -159,7 +156,7 @@ public class CPU {
         }
         
         // MAR
-        this.MAR = new Registrador(tamanhoRegistrador);
+        this.MAR = new Registrador(tamanhoPalavra);
         {
             // MAR --(00)--> Barramento Externo
             this.MAR.definirComoOrigem(UC.obterConexao(1));            
@@ -171,7 +168,7 @@ public class CPU {
         }
         
         // MBR
-        this.MBR = new Registrador(tamanhoRegistrador);
+        this.MBR = new Registrador(tamanhoPalavra);
         {
             // MBR --(00)--> Barramento
             this.MBR.definirComoOrigem(UC.obterConexao(1));            
@@ -189,5 +186,8 @@ public class CPU {
             barramentoExterno.definirComoOrigem(UC.obterConexao(0));
             this.MBR.definirComoDestino(UC.obterConexao(0));
         }
+        
+        //this.ULA = new ULA();
+        //this.UC = new UC(RAM, ULA);
     }
 }
