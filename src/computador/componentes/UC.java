@@ -48,6 +48,22 @@ public class UC {
         return -1;
     }
     
+    /*
+    
+     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                          !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                               !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
+    LEMBRAR DE QUE: AS PORTAS DE SAIDA SAO ABERTAS PRIMEIRO E DEPOIS AS DE ENTRADA SAO ABERTAS
+    ISTO EH EXTREMAMENTE IMPORTANTE PARA O FUNCIONAMENTO DO PROGRAMA POIS ABRIR UMA PORTA 
+    DE ENTRADA PRIMEIRO E DEPOIS UMA DE SAIDA NAO PERMITE O FLUXO DOS DADOS, REPITO, NAO
+    PERMITE O FLUXO DOS DADOS.
+    
+    */
+    
     public ConexaoBinaria obterConexao(int posicao) {
         return this.conexoes[posicao];
     }
