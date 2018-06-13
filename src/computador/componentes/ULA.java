@@ -30,7 +30,7 @@ public class ULA {
             throw new IllegalArgumentException("Nao eh possivel criar a ULA: "
                 + "o tamanho dos registradores e da entrada nao estao adequados");
         
-        if(resultado.obterNumeroParticoes() != 2)
+        if(resultado.numeroParticoes() != 2)
             throw new IllegalArgumentException("O Registrador de saida deve ter exatamente duas particoes");
         
         if(tamanhoOperando <= 0)

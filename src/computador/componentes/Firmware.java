@@ -7,13 +7,13 @@ import java.util.Scanner;
 
 /**
  *
- * Dta: 11/06/2018
+ * Data: 11/06/2018
  */
 public class Firmware {
     
     private static final char DEMARCADOR_COMENTARIO = '#';
     
-    private static final int TAMANHO_PALAVRA_CONTROLE = 39;
+    public static final int TAMANHO_PALAVRA_CONTROLE = 39;
     
     /******************************** INDICES ********************************/
     
@@ -113,5 +113,10 @@ public class Firmware {
             
             indiceLinha++;
         }
+    }
+    
+    public int[] ler(int endereco) {
+       // RETORNAR UMA COPIA -- COPIAA --
+        return null;
     }
 }

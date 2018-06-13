@@ -72,7 +72,7 @@ public class Registrador implements Conectavel {
      * 
      * @return numero de particoes do Registrador
      */
-    public int obterNumeroParticoes() {
+    public int numeroParticoes() {
         return this.NUMERO_PARTICOES;
     }
     
@@ -145,6 +145,31 @@ public class Registrador implements Conectavel {
     }
     
     /**
+     * Escreve um valor em um bit especifico do Registrador.
+     * 
+     * @param bit Valor a ser escrito
+     * @param indice Indice do bit
+     */
+    public void escreverBit(int bit, int indice) {
+        if(indice < 0 || indice >= this.TAMANHO)
+            throw new IllegalArgumentException("Indice de particao invalido");
+        
+        int particao = 0;
+        int posicao = 0;
+        int contador = 0;
+        
+        while(contador < indice) {
+            posicao++;
+            if(posicao >= this.binario[particao].length) {
+                particao++;
+                posicao = 0;
+            }
+        }
+        
+        this.binario[particao][posicao] = bit;
+    }
+    
+    /**
      * Cria um vetor do tamanho do Registrador e retorna. Caso haja mais de uma
      * particao no Registrador os bits sao copiados para o vetor de acordo com
      * o indice de seu registrador e seu proprio indice.
@@ -182,6 +207,31 @@ public class Registrador implements Conectavel {
             temp[i] = this.binario[particao][i];
         
         return temp;
+    }
+    
+    /**
+     * Retorna o valor de um bit especifico no Registrador.
+     * 
+     * @param indice Indice do bit
+     * @return Valor do bit no indice indicado
+     */
+    public int lerBit(int indice) {
+        if(indice < 0 || indice >= this.TAMANHO)
+            throw new IllegalArgumentException("Indice de particao invalido");
+        
+        int particao = 0;
+        int posicao = 0;
+        int contador = 0;
+        
+        while(contador < indice) {
+            posicao++;
+            if(posicao >= this.binario[particao].length) {
+                particao++;
+                posicao = 0;
+            }
+        }
+        
+        return this.binario[particao][posicao];
     }
     
     /**
