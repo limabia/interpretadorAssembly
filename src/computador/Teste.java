@@ -142,6 +142,7 @@ public class Teste {
             
             a_bar.abrir();
             bar_b.abrir();
+            barramento.conectar();
             
             System.out.print("Conteudo do A: ");
             imprimir(A.ler());
@@ -160,6 +161,7 @@ public class Teste {
             
             c1_bar.abrir();
             bar_a.abrir();
+            barramento.conectar();
             
             System.out.print("Conteudo do C: ");
             imprimir(C.ler());
@@ -179,6 +181,7 @@ public class Teste {
             {
                 c2_bar.abrir();    // barramento <-- C(c2)
                 bar_mar.abrir();   // MAR <-- Barramento
+                barramento.conectar();
             }
             
             // T2
@@ -187,6 +190,7 @@ public class Teste {
                 bar_mbr.abrir();    // mbr <-- barramento
                 mar_barEx.abrir(); // barramento externo <-- MAR
                 barEx_ram.abrir(); // RAM(buffer) <-- barramento externo          
+                barramento.conectar();
                 
                 // Esta operacao deve ser realizada so dps que o buffer tiver o endereco
                 RAM.enderecoValido();
@@ -196,7 +200,8 @@ public class Teste {
             {
                 mbr_barEx.abrir(); // Barramento externo <-- MBR
                 barEx_ram.abrir(); // RAM(buffer) <-- Barramento externo
-            
+                barramento.conectar();
+                
                 RAM.escrever();
             }
             
@@ -210,12 +215,14 @@ public class Teste {
                 
                 ram_barEx.abrir(); // Barramento Externo <-- RAM(buffer)
                 barEx_mbr.abrir(); // MBR <-- Barramento Externo
+                barramento.conectar();
             }
             
             // T5
             {
                 mbr_bar.abrir(); // Barramento <-- MBR
                 bar_a.abrir();   // A <-- Barramento
+                barramento.conectar();
             }
 
             System.out.print("Conteudo do B: ");
