@@ -16,9 +16,11 @@ public class ConexaoBinaria {
     private int tamanhoOrigem;
     private int tamanhoDestino;
     
+    // Indice se os dados a serem transmitidos estao em complemento de dois
     private boolean complementoDeDois;
     
-    
+    // Indica se a conexao esta aberta (pode enviar dados) ou nao
+    private boolean aberta;
     
     /**
      * Define se a conexao trasnferir binarios em complemento de dois ou nao
@@ -28,6 +30,7 @@ public class ConexaoBinaria {
      */
     public ConexaoBinaria(boolean complementoDeDois) {
         this.complementoDeDois = complementoDeDois;
+        this.aberta = false;
     }
   
     
@@ -135,7 +138,29 @@ public class ConexaoBinaria {
     }
     
     /**
-     * Quando a conexao eh aberta o conteudo de 'origem' eh copiado para 'destino'.
+     * Define a conexao como aberta.
+     */
+    public void abrir() {
+        this.aberta = true;
+    }
+    
+    /**
+     * Define uma conexao como fechada.
+     */
+    public void fechar() {
+        this.aberta = false;
+    }
+    
+    /**
+     * Verifica se a porta esta aberta.
+     * @return 'true' caso a porta esteja aberta, 'false' caso nao esteja.
+     */
+    public boolean aberta() {
+        return this.aberta();
+    }
+    
+    /**
+     * O valor de 'origem' eh copiado para 'destino' somente se a conexao esta aberta.
      * Caso o destino tenha um tamanho maior do que a origem, os espacos restantes
      * sao preenchidos com o ultimo bit da 'origem', pois assim a propriedade de
      * complemento de dois eh mantida.
@@ -145,8 +170,8 @@ public class ConexaoBinaria {
      * @return 'true' caso seja possivel fazer a abertura da conexao ou 'false'
      *         caso nao seja.
      */
-    public boolean abrir() {
-        if(this.origem == null || this.destino == null) return false;
+    public boolean conectar() {
+        if(!this.aberta || this.origem == null || this.destino == null) return false;
         
         int i = this.destino.length - 1;
         int j = this.destino[i].length - 1;
