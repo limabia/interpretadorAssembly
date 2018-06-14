@@ -75,7 +75,7 @@ public class UC {
     
     public void iniciarCiclo() {
         int CAR; // Control Address Register
-        int[] CBR = new int[Firmware.TAMANHO_PALAVRA_CONTROLE]; // Control Buffer Register
+        int[] CBR = null; // Control Buffer Register
         
         // Transforma o opcode da isntrucao do IR em um endereco do microprograma
         CAR = decoderOpcode(this.IR.ler(0));
@@ -85,7 +85,31 @@ public class UC {
         int portaSaidaP1 = -1;
         int portaSaidaP2 = -1;
         
-        while(true) {
+        // 0 - Busca
+        // 1 - Indirecao
+        // 2 - Execucao
+        int ICC = 0;
+        
+        while(CAR > 0) {
+               
+            // Calcula proximo endereco
+            {
+                if(CBR[0] == 1)
+                    CAR = decoderOpcode(this.IR.ler(0));
+                else if(CBR[Firmware.INDICE_JUMP_INCONDICIONAL] == 1)
+                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
+                
+                else if(CBR[Firmware.INDICE_JUMP_OVERFLOW] == 1 && this.ULA.flagOverflow())
+                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
+                
+                else if(CBR[Firmware.INDICE_JUMP_ZERO] == 1 & this.ULA.flagZero())
+                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
+                
+                else
+                    CAR++;
+                    
+            }
+            
             CBR = this.firmware.ler(CAR);
             
             if(CBR[Firmware.INDICE_FLAG_ENTRADA_P1] == 1)
@@ -97,18 +121,37 @@ public class UC {
             if(CBR[Firmware.INDICE_FLAG_SAIDA_P2] == 1)
                 CBR[portaSaidaP2] = 1;
             
+            if(CBR[Firmware.INDICE_SINAIS_MEMORIA] == 2) // Ler
+                this.RAM.ler();
+            
             for(int i = Firmware.INDICE_SINAIS_CONTROLE; i < Firmware.INDICE_SINAIS_CONTROLE + Firmware.NUMERO_SINAIS_CONTROLE; i++)
                 if(CBR[i] == 1)
                     this.conexoes[i - Firmware.NUMERO_SINAIS_CONTROLE].abrir();
             
-            // Interpretar sinais de ULA e da Memoria
+            // Interpreta os sinais da ULA
+            this.ULA.operar(CBR[Firmware.INDICE_SINAIS_ULA]);
+            
+            this.RAM.operar(CBR[Firmware.INDICE_SINAIS_MEMORIA]);
             
             // Dispara a movimentacao dos dados
             barramento.conectar();
             
-            // Calcular proximo endereco
+            // Calcula proximo endereco
+            {
+                if(CBR[Firmware.INDICE_JUMP_INCONDICIONAL] == 1)
+                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
+                
+                else if(CBR[Firmware.INDICE_JUMP_OVERFLOW] == 1 && this.ULA.flagOverflow())
+                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
+                
+                else if(CBR[Firmware.INDICE_JUMP_ZERO] == 1 & this.ULA.flagZero())
+                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
+                
+                else
+                    CAR++;
+                    
+            }
             
-            // Determinar condicao de parada para o loop
         }
         
         
