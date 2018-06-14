@@ -50,7 +50,36 @@ public class RAM implements Conectavel {
         this.endereco = enderecoMinimo;
     }
     
-    
+    /**
+     * Dado o codigo da operacao realiza a operacao envolvendo a RAM. -1 eh o
+     * codigo para nao realizar nenhuma operacao.
+     * 
+     * @param codigoOperacao Codigo da operacao a ser realizada
+     * @return 'true' caso seja possivel realizar a operacao (-1 inclusive) ou
+     *         'false' caso nao seja
+     */
+    public boolean operar(int codigoOperacao) {
+        switch(codigoOperacao) {
+            case -1:
+                // Nao faz nada
+                return true;
+                
+            case 0: // Define o valor do buffer da RAM como um endereco
+                this.enderecoValido();
+                return true;
+
+            case 1: // Escreve na RAM
+                this.escrever();
+                return true;
+
+            case 2: // Faz a leitura na RAM
+                this.ler();
+                return true;
+                
+            default:
+                return false;
+        }
+    }
     
     /**
      * Verifica se o binario que esta salvo no Registrador buffer eh um endereco
