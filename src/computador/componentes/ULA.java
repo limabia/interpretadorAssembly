@@ -1,12 +1,15 @@
 package computador.componentes;
 
+import computador.conexao.Conectavel;
+import computador.conexao.ConexaoBinaria;
+
 /**
  *
  * Data: 31-05-2018
  */
-public class ULA {
+public class ULA implements Conectavel {
     
-    private final int tamanhoOperando;
+    private final Registrador operando1;
     
     /* Registradores de entrada e saida */
     private Registrador segundoOperando; // Registrador com o segundo operando
@@ -36,7 +39,7 @@ public class ULA {
         if(tamanhoOperando <= 0)
             throw new IllegalArgumentException("O tamanho dos operandos da ULA devem ser maiores do que 0");
         
-        this.tamanhoOperando = tamanhoOperando;
+        this.operando1 = new Registrador(tamanhoOperando);
         
         this.segundoOperando = segundoOperando;
         this.resultado = resultado;
@@ -54,7 +57,7 @@ public class ULA {
      * 
      * @return 'true' se o ultimo resultado for zero, 'false' caso contrario.
      */
-    public boolean obterFlagZero() {
+    public boolean flagZero() {
         return this.flagZero;
     }
     
@@ -64,7 +67,7 @@ public class ULA {
      * @return 'true' caso o ultimo resultado tenha sido positivo, 'false' caso
      *         contrario.
      */
-    public boolean obterSinalPositivo() {
+    public boolean sinalPositivo() {
         return this.flagSinalPositivo;
     }
     
@@ -74,7 +77,7 @@ public class ULA {
      * @return 'true' caso a ultima operacao tenha dado overflow, 'false' caso
      *         contrario.
      */
-    public boolean obterFlagOverflow() {
+    public boolean flagOverflow() {
         return this.flagOverflow;
     }
     
@@ -82,25 +85,24 @@ public class ULA {
     
     /**
      * Dado um codigo de operacao e um operando realiza uma operacao com o
-     * primeiroOPerando, passado por paramentro, e com o valor armazenado no
-     * Registrador segundoParametro (caso seja uma operacao binaria - dois
-     * parametros) e salva o resultado no Registrador resultado.
+     * primeiroOPerando e com o valor armazenado no Registrador segundoParametro
+     * (caso seja uma operacao binaria - dois parametros) e salva o resultado no
+     * Registrador resultado.
      *
      * Os operandos podem estar em complemento de dois ou nao, depende da
      * operacao escolhida.
      * 
-     * @param primeiroOperando Primeiro operando
      * @param codigoOperacao Codigo da operacao a ser executada
      * @return 'true' caso seja possivel realizar a operacao, 'false' caso nao
      *         seja.
      */
-    public boolean operar(int codigoOperacao, int[] primeiroOperando) {
-    
-        if(primeiroOperando.length != this.tamanhoOperando)
-            throw new IllegalArgumentException("O operando deve ter exatamente " + 
-                    this.tamanhoOperando + " bits de tamanho");
+    public boolean operar(int codigoOperacao) {
         
         switch(codigoOperacao) {
+            case -1:
+                // Nao faz nada
+                break;
+            
             case 0: // incrementar
                 
                 break;
@@ -136,5 +138,28 @@ public class ULA {
         return false; 
     }
     
+    /**
+     * Define o Registrador interno como destino de um objeto ConexaoBinaria.
+     * 
+     * @param conexao Conexao a ter o Registrador interno como destino
+     * @return 'true' caso tenha sido possivel definir o Registrador interno como
+     *         destino, ou false caso nao tenha sido.
+     */
+    @Override
+    public boolean definirComoDestino(ConexaoBinaria conexao) {
+        return this.operando1.definirComoDestino(conexao);
+    }
+    
+    /**
+     * Define o Registrador interno como origem de um objeto ConexaoBinaria.
+     * 
+     * @param conexao Conexao a ter o Registrador interno como origem
+     * @return 'true' caso tenha sido possivel definir o Registrador interno como
+     *         origem, ou false caso nao tenha sido.
+     */
+    @Override
+    public boolean definirComoOrigem(ConexaoBinaria conexao) {
+        return this.operando1.definirComoOrigem(conexao);
+    }
     
 }
