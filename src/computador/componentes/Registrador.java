@@ -19,7 +19,7 @@ public class Registrador implements Conectavel {
     private final int NUMERO_PARTICOES;
     
     // Representacao do registrador com suas particoes
-    private int[][] binario;
+    private final int[][] binario;
 
     
     
