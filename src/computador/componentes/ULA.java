@@ -53,6 +53,18 @@ public class ULA implements Conectavel {
     
     
     /**
+     * Verifica se um codigo de uma operacao eh valido.
+     * 
+     * @param codigoOperacao Codigo da operacao
+     * @return 'true' caso o codigo seja valido, 'false' caso nao seja.
+     */
+    public static boolean codigoValido(int codigoOperacao) {
+        return (codigoOperacao >= 0 && codigoOperacao <= 7);
+    }
+    
+    
+    
+    /**
      * Retorna o valor da flag de resultado zero.
      * 
      * @return 'true' se o ultimo resultado for zero, 'false' caso contrario.
@@ -99,37 +111,37 @@ public class ULA implements Conectavel {
     public boolean operar(int codigoOperacao) {
         
         switch(codigoOperacao) {
-            case -1:
+            case 0:
                 // Nao faz nada
-                break;
+                return true;
             
-            case 0: // incrementar
+            case 1: // incrementar
                 
-                break;
+                return true;
             
-            case 1: // incrementar (comp 2)
+            case 2: // incrementar (comp 2)
                 
-                break;    
+                return true;    
                 
-            case 2: // somar
+            case 3: // somar
                 
-                break;    
+                return true;    
                 
-            case 3: // somar (comp 2)
+            case 4: // somar (comp 2)
                 
-                break;
+                return true;
                 
-            case 4: // subtrair (comp 2)
+            case 5: // subtrair (comp 2)
                 
-                break;
+                return true;
                 
-            case 5: // multiplicar (comp 2)
+            case 6: // multiplicar (comp 2)
                 
-                break;
+                return true;
                 
-            case 6: // dividir (comp 2)
+            case 7: // dividir (comp 2)
                 
-                break;
+                return true;
                 
             default:
             

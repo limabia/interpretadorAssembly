@@ -50,6 +50,20 @@ public class RAM implements Conectavel {
         this.endereco = enderecoMinimo;
     }
     
+    
+    
+    /**
+     * Verifica se um codigo de uma operacao eh valido.
+     * 
+     * @param codigoOperacao Codigo da operacao
+     * @return 'true' caso o codigo seja valido, 'false' caso nao seja.
+     */
+    public static boolean codigoValido(int codigoOperacao) {
+        return (codigoOperacao >= 0 && codigoOperacao <= 3);
+    }
+    
+    
+    
     /**
      * Dado o codigo da operacao realiza a operacao envolvendo a RAM. -1 eh o
      * codigo para nao realizar nenhuma operacao.
@@ -60,19 +74,19 @@ public class RAM implements Conectavel {
      */
     public boolean operar(int codigoOperacao) {
         switch(codigoOperacao) {
-            case -1:
+            case 0:
                 // Nao faz nada
                 return true;
                 
-            case 0: // Define o valor do buffer da RAM como um endereco
+            case 1: // Define o valor do buffer da RAM como um endereco
                 this.enderecoValido();
                 return true;
 
-            case 1: // Escreve na RAM
+            case 2: // Escreve na RAM
                 this.escrever();
                 return true;
 
-            case 2: // Faz a leitura na RAM
+            case 3: // Faz a leitura na RAM
                 this.ler();
                 return true;
                 

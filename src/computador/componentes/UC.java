@@ -96,6 +96,7 @@ public class UC {
             {
                 if(CBR[0] == 1)
                     CAR = decoderOpcode(this.IR.ler(0));
+                
                 else if(CBR[Firmware.INDICE_JUMP_INCONDICIONAL] == 1)
                     CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
                 
