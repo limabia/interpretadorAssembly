@@ -2,9 +2,13 @@ package computador.componentes;
 
 /**
  *
- * @author a10414571
+ * 
  */
 public class PalavraControle {
+    
+    private boolean jumpEntradaP1;
+    private boolean jumpSaidaP1;
+    private boolean jumpSaidaP2;
     
     private boolean[] sinaisDeControle;
     
@@ -15,6 +19,68 @@ public class PalavraControle {
     private boolean jumpZero;
     private boolean jumpOverflow;
     
+    private boolean lerIR;
+    private int enderecoJump;
+    
+    // DEBUGG
+    public void imprimir() {
+        
+    }
+    
+    //DOCUMENTAR ISSO DPS
+    
+    public void jumpEntradaP1(boolean status) {
+        this.jumpEntradaP1 = status;
+    }
+    
+    public boolean jumpEntradaP1() {
+        return this.jumpEntradaP1;
+    }
+    
+    public void jumpSaidaP1(boolean status) {
+        this.jumpSaidaP1 = status;
+    }
+    
+    public boolean jumpSaidaP1() {
+        return this.jumpSaidaP1;
+    }
+    
+    public void jumpSaidaP2(boolean status) {
+        this.jumpSaidaP2 = status;
+    }
+    
+    public boolean jumpSaidaP2() {
+        return this.jumpSaidaP2;
+    }
+    
+    /**
+     * Define um conjunto de sinais de controle booleanas
+     * 
+     * @param sinaisDeControle Sinais de controle
+     */
+    public void sinaisDeControle(boolean[] sinaisDeControle) {
+        this.sinaisDeControle = sinaisDeControle;
+    }
+    
+    public void sinalDeControle(int indice, boolean status) {
+        if(indice < 0 || indice >= this.sinaisDeControle.length)
+            throw new IllegalArgumentException("Indice invalido");
+        
+        this.sinaisDeControle[indice] = status;
+    }
+    
+    /**
+     * Retorna o sinal de controle para uma porta
+     * 
+     * @param indice Indice do sinal de controle
+     * @return Valor booleano do sinal de controle
+     */
+    public boolean sinalDeControle(int indice) {
+        if(indice < 0 || indice >= this.sinaisDeControle.length)
+            throw new IllegalArgumentException("Indice invalido");
+        
+        return this.sinaisDeControle[indice];
+    }
     
     /**
      * Setter para a codigo da operacao da ULA
@@ -63,7 +129,7 @@ public class PalavraControle {
      * 
      * @param status Valor boolean da flag
      */
-    public void jumpIndondicional(boolean status) {
+    public void jumpIncondicional(boolean status) {
         this.jumpIncondicional = status;
     }
     
@@ -72,7 +138,7 @@ public class PalavraControle {
      * 
      * @return Valor booleano da flag
      */
-    public boolean jumpIndondicional() {
+    public boolean jumpIncondicional() {
         return this.jumpIncondicional;
     }
        
@@ -110,5 +176,42 @@ public class PalavraControle {
      */
     public boolean jumpOverflow() {
         return this.jumpOverflow;
+    }
+    
+    /**
+     * Setter para a flag de leitura do enndereco no IR
+     * 
+     * @param status Valor boolean da flag
+     */
+    public void lerIR(boolean status) {
+        this.lerIR = status;
+    }
+    
+    /**
+     * Getter para a flag da leitura do proximo endereco
+     * 
+     * @return 'true' caso seja necessario ler do IR o proximo endereco, 'false'
+     *         caso nao seja
+     */
+    public boolean lerIR() {
+        return this.lerIR;
+    }
+
+    /**
+     * Setter para o endereco para a proxima instrucao em caso de jump
+     * 
+     * @param enderecoJump Endreco de jump no microprograma
+     */
+    public void enderecoJump(int enderecoJump) {
+        this.enderecoJump = enderecoJump;
+    }
+    
+    /**
+     * Getter para o endereco de jump
+     * 
+     * @return Endreco de jump no microprograma
+     */
+    public int enderecoJump() {
+        return this.enderecoJump;
     }
 }

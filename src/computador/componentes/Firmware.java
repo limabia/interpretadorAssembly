@@ -32,11 +32,12 @@ public class Firmware {
     public static final int INDICE_JUMP_ZERO = 36;
     public static final int INDICE_JUMP_OVERFLOW = 37;
     
-    public static final int INDICE_ENDERECO_JUMP = 38;
+    public static final int INDICE_FLAG_LER_IR = 38;
+    public static final int INDICE_ENDERECO_JUMP = 39;
     
     
     private int numeroPalavras;
-    private int[][] firmware;
+    private PalavraControle[] firmware;
     
     /**
      * Cria um microprograma lendo um arquivo com o microprograma.
@@ -54,6 +55,10 @@ public class Firmware {
             throw new FirmwareException("Nao foi possivel carregar o micro"
                     + "programa: " + fnfe.getMessage());
         }
+    }
+    
+    private boolean valorBooleano(int valor) {
+        return (valor == 1);
     }
     
     /**
@@ -82,7 +87,7 @@ public class Firmware {
         
         numeroPalavras = new Scanner(palavraControle).nextInt();
         
-        this.firmware = new int[numeroPalavras][TAMANHO_PALAVRA_CONTROLE];
+        this.firmware = new PalavraControle[numeroPalavras];
         
         // Salva o microprograma em uma matriz
         while(arquivoFirmware.hasNextLine()) {
@@ -93,30 +98,48 @@ public class Firmware {
                     palavraControle.charAt(0) == DEMARCADOR_COMENTARIO)
                 continue;
             
+            this.firmware[indiceLinha] = new PalavraControle();
+            
             auxiliar = new Scanner(palavraControle);
             
-            this.firmware[indiceLinha][INDICE_FLAG_ENTRADA_P1] = auxiliar.nextInt();
-            this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P1] = auxiliar.nextInt();
-            this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P2] = auxiliar.nextInt();
+            this.firmware[indiceLinha].jumpEntradaP1(this.valorBooleano(auxiliar.nextInt()));
+            this.firmware[indiceLinha].jumpSaidaP1(this.valorBooleano(auxiliar.nextInt()));
+            this.firmware[indiceLinha].jumpSaidaP2(this.valorBooleano(auxiliar.nextInt()));
+            //this.firmware[indiceLinha][INDICE_FLAG_ENTRADA_P1] = auxiliar.nextInt();
+            //this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P1] = auxiliar.nextInt();
+            //this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P2] = auxiliar.nextInt();
             
-            for(int i = 0; i < NUMERO_SINAIS_CONTROLE; i++)
-                this.firmware[indiceLinha][INDICE_SINAIS_CONTROLE + i] = auxiliar.nextInt();
+            boolean[] sinaisDeControle = new boolean[NUMERO_SINAIS_CONTROLE];
             
-            this.firmware[indiceLinha][INDICE_SINAIS_ULA] = auxiliar.nextInt();
-            this.firmware[indiceLinha][INDICE_SINAIS_MEMORIA] = auxiliar.nextInt();
+            for(int i = 0; i < sinaisDeControle.length; i++)
+                sinaisDeControle[i] = this.valorBooleano(auxiliar.nextInt());
+            this.firmware[indiceLinha].sinaisDeControle(sinaisDeControle);
+            //for(int i = 0; i < NUMERO_SINAIS_CONTROLE; i++)
+               // this.firmware[indiceLinha][INDICE_SINAIS_CONTROLE + i] = auxiliar.nextInt();
             
-            this.firmware[indiceLinha][INDICE_JUMP_INCONDICIONAL] = auxiliar.nextInt();
-            this.firmware[indiceLinha][INDICE_JUMP_ZERO] = auxiliar.nextInt();
-            this.firmware[indiceLinha][INDICE_JUMP_OVERFLOW] = auxiliar.nextInt();
+            this.firmware[indiceLinha].operacaoULA(auxiliar.nextInt());
+            this.firmware[indiceLinha].operacaoRAM(auxiliar.nextInt());
+            //this.firmware[indiceLinha][INDICE_SINAIS_ULA] = auxiliar.nextInt();
+            //this.firmware[indiceLinha][INDICE_SINAIS_MEMORIA] = auxiliar.nextInt();
             
-            this.firmware[indiceLinha][INDICE_ENDERECO_JUMP] = auxiliar.nextInt();
+            this.firmware[indiceLinha].jumpIncondicional(this.valorBooleano(auxiliar.nextInt()));
+            this.firmware[indiceLinha].jumpZero(this.valorBooleano(auxiliar.nextInt()));
+            this.firmware[indiceLinha].jumpOverflow(this.valorBooleano(auxiliar.nextInt()));
+            
+            //this.firmware[indiceLinha][INDICE_JUMP_INCONDICIONAL] = auxiliar.nextInt();
+            //this.firmware[indiceLinha][INDICE_JUMP_ZERO] = auxiliar.nextInt();
+            //this.firmware[indiceLinha][INDICE_JUMP_OVERFLOW] = auxiliar.nextInt();
+            
+            this.firmware[indiceLinha].lerIR(this.valorBooleano(auxiliar.nextInt()));
+            
+            this.firmware[indiceLinha].enderecoJump(auxiliar.nextInt());
+            //this.firmware[indiceLinha][INDICE_ENDERECO_JUMP] = auxiliar.nextInt();
             
             indiceLinha++;
         }
     }
     
-    public int[] ler(int endereco) {
-       // RETORNAR UMA COPIA -- COPIAA --
-        return null;
+    public PalavraControle ler(int endereco) {
+        return this.firmware[endereco];
     }
 }

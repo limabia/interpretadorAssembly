@@ -22,6 +22,13 @@ public class UC {
     
     private final Firmware firmware;
     
+    private int CAR = 0; // Control Address Register
+    private PalavraControle CBR;
+    
+    private int portaEntraP1;
+    private int portaSaidaP1;
+    private int portaSaidaP2;
+    
     public UC(RAM RAM, ULA ULA, Barramento barramento, ConexaoBinaria[] conexoes,
             Registrador IR, Registrador PC, String microprograma) throws ComponentException {
     
@@ -73,7 +80,41 @@ public class UC {
         return -1;
     }
     
-    public void iniciarCiclo() {
+    public void executarCiclo() {
+    
+        // Le uma palavra de controle
+        this.CBR = this.firmware.ler(this.CAR);        
+        
+        // LER PORTAS DE ENTRADA DO IR
+        // portaEntraP1 = -1;
+        // portaSaidaP1 = -1;
+        // portaSaidaP2 = -1;
+        
+        if(this.CBR.jumpEntradaP1())
+            this.CBR.sinalDeControle(this.portaEntraP1, true);
+          
+        if(this.CBR.jumpSaidaP1())
+            this.CBR.sinalDeControle(this.portaSaidaP1, true);
+        
+        if(this.CBR.jumpSaidaP2())
+            this.CBR.sinalDeControle(this.portaSaidaP2, true);
+
+        
+        // Interpreta os sinais da ULA e da RAM
+        this.ULA.operar(this.CBR.operacaoULA());
+        this.RAM.operar(this.CBR.operacaoRAM());
+        
+        if(this.CBR.lerIR())
+            this.CBR.enderecoJump(decoderOpcode(this.IR.ler(0)));
+        
+        if(this.CBR.jumpIncondicional() || this.CBR.jumpZero() || this.CBR.jumpOverflow())
+            this.CAR = this.CBR.enderecoJump();
+        else
+            this.CAR++;
+        
+    }
+    
+    /*public void iniciarCiclo() {
         int CAR; // Control Address Register
         int[] CBR = null; // Control Buffer Register
         
@@ -154,8 +195,6 @@ public class UC {
             }
             
         }
-        
-        
-    }
+    }*/
     
 }
