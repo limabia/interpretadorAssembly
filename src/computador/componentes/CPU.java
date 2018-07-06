@@ -159,7 +159,7 @@ public class CPU {
         
         this.ULA = new ULA(tamanhoPalavra, T, AC);
         
-        String microprograma = (new java.io.File("").getAbsolutePath() + "/memoriaControle.txt");
+        String microprograma = (new java.io.File("").getAbsolutePath() + "/src/memoriaControle.txt");
         //System.out.println("---------------------------" + microprograma);
         this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, microprograma);
         //this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, MICROPORGRAMA_GAMTEMPORARIA);
