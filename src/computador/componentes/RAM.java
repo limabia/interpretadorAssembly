@@ -18,7 +18,7 @@ public class RAM implements MemoriaPrimaria {
     private final HashMap<Integer, int[]> MEMORIA;
  
     // Registrador para armazenamento temporario de enderecoes e dados
-    public final Registrador BUFFER;
+    private final Registrador BUFFER;
     
     // Limites inclusivos para o endereco 
     private final int ENDERECO_MINIMO;
@@ -77,6 +77,7 @@ public class RAM implements MemoriaPrimaria {
                 
             case 1: // Define o valor do buffer da RAM como um endereco
                 this.enderecoValido();
+                System.out.println("RAM: operar -> endereco valido");
                 return true;
 
             case 2: // Escreve na RAM
@@ -92,8 +93,42 @@ public class RAM implements MemoriaPrimaria {
         }
     }
     
-    public void escreverBuffer(int[] binario) {
-        this.BUFFER.escrever(binario);
+    /**
+     * Retorna o binario armazenado no BUFFER da RAM
+     * 
+     * @return Binario armazenado no BUFFER da RAM
+     */
+    @Override
+    public String getValorBUFFER() {
+        return this.BUFFER.toString();
+    }
+    
+    /**
+     * Retorna o valor do endereco armazenado na RAM
+     * 
+     * @return Valor do endereco armazenado na RAM
+     */
+    @Override
+    public String getEndereco() {
+        return Integer.toString(this.endereco);
+    }
+    
+    /**
+     * Escreve um programa inteiro na memoria a partir de um ponto inicial.
+     * 
+     * @param inicio Inicio de onde o programa sera salvo
+     * @param programa Programa a ser salvo
+     */
+    @Override
+    public void escreverPrograma(int inicio, int[][] programa) {
+        
+        this.endereco = inicio;
+        
+        for(int[] comando : programa) {
+            this.BUFFER.escrever(comando);
+            this.escrever();
+            this.endereco++;
+        }
     }
     
     /**
@@ -104,15 +139,16 @@ public class RAM implements MemoriaPrimaria {
      * @return 'true' caso o endereco tenha sido salvo com sucesso ou
      *         'false' caso nao tenha, isto eh, o endereco eh invalido.
      */
+    @Override
     public boolean enderecoValido() {
-
+        
         int valor = Binario.valorInteiroComplementoDeDois(BUFFER.ler());
         
         if(valor < this.ENDERECO_MINIMO || valor > this.ENDERECO_MAXIMO)
             return false; // Endereco invalido
         
         this.endereco = valor;
-        
+        //this.ler();
         return true;
     }
     
@@ -120,6 +156,7 @@ public class RAM implements MemoriaPrimaria {
      * Escreve o conteudo do buffer na posicao de memoria indicada pelo atributo
      * 'endereco'.
      */
+    @Override
     public void escrever() {
        this.MEMORIA.put(this.endereco, this.BUFFER.ler());
     }
@@ -128,12 +165,28 @@ public class RAM implements MemoriaPrimaria {
      * Le o conteudo que esta armazenado no endereco indicado pelo atributo
      * 'endereco' e salva no BUFFER.
      */
+    @Override
     public void ler() {
         int[] conteudo = this.MEMORIA.get(this.endereco);
         
         if(conteudo == null) conteudo = new int[BUFFER.obterTamanho()];
         
         this.BUFFER.escrever(conteudo);
+    }
+    
+    @Override
+    public int codigoOperacaoEnderecoValido() {
+        return 1;
+    }
+    
+    @Override
+    public int codigoOperacaoEscrever() {
+        return 2;
+    }
+    
+    @Override
+    public int codigoOperacaoLer() {
+        return 3;
     }
     
     /**
