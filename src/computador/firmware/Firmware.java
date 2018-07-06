@@ -1,7 +1,10 @@
-package computador.componentes;
+package computador.firmware;
 
+import computador.componentes.PalavraControle;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -12,8 +15,9 @@ import java.util.Scanner;
 public class Firmware {
     
     private static final char DEMARCADOR_COMENTARIO = '#';
+    private static final char DEMARCADOR_CODIGO_OPERACAO = '$';
     
-    public static final int TAMANHO_PALAVRA_CONTROLE = 39;
+    public static final int TAMANHO_PALAVRA_CONTROLE = 40;
     
     /******************************** INDICES ********************************/
     
@@ -37,7 +41,8 @@ public class Firmware {
     
     
     private int numeroPalavras;
-    private PalavraControle[] firmware;
+    private ArrayList<PalavraControle> firmware;
+    private HashMap<Integer, Integer> enderecoIntrucao;
     
     /**
      * Cria um microprograma lendo um arquivo com o microprograma.
@@ -46,6 +51,9 @@ public class Firmware {
      * @throws FirmwareException Falha ao ler o arquivo
      */
     public Firmware(String nomeArquivoFirmware) throws FirmwareException {
+        this.firmware = new ArrayList();
+        this.enderecoIntrucao = new HashMap();
+        
         try {
             carregar(nomeArquivoFirmware);
         } catch(InputMismatchException ime) {
@@ -69,77 +77,90 @@ public class Firmware {
      * @throws FileNotFoundException Arquivo nao encontrado
      */
     private void carregar(String nomeArquivoFirmware) throws FileNotFoundException{
-        Scanner arquivoFirmware = new Scanner(new File(nomeArquivoFirmware));
-        
+        //Scanner arquivoFirmware = new Scanner(new File(nomeArquivoFirmware));
+        Scanner arquivoFirmware = new Scanner(nomeArquivoFirmware);
         Scanner auxiliar;
-        String palavraControle = "0";
+        String palavraControleString = "0";
         int indiceLinha = 0;
         
         // Procura a linha com o numero de palavras de controle do microprograma
-        while(arquivoFirmware.hasNextLine()) {
+        /*while(arquivoFirmware.hasNextLine()) {
             palavraControle = arquivoFirmware.nextLine();
             
             // Caso a linha nao esteja vazia e nao seja de comentario para a busca
-            if(palavraControle.length() == 0 && 
+            if(palavraControle.length() != 0 && 
                     palavraControle.charAt(0) != DEMARCADOR_COMENTARIO)
                 break;
         }
         
-        numeroPalavras = new Scanner(palavraControle).nextInt();
+        if(!arquivoFirmware.hasNextLine())
+            return;*/
         
-        this.firmware = new PalavraControle[numeroPalavras];
+        //numeroPalavras = new Scanner(palavraControle).nextInt();
         
         // Salva o microprograma em uma matriz
         while(arquivoFirmware.hasNextLine()) {
-            palavraControle = arquivoFirmware.nextLine();
+            palavraControleString = arquivoFirmware.nextLine();
             
             // Pula linha vazia ou de comentario
-            if(palavraControle.length() == 0 || 
-                    palavraControle.charAt(0) == DEMARCADOR_COMENTARIO)
+            if(palavraControleString.length() == 0 || 
+                    palavraControleString.charAt(0) == DEMARCADOR_COMENTARIO)
                 continue;
             
-            this.firmware[indiceLinha] = new PalavraControle();
+            // Mapeia o indice da primeira palavra de controle de cada instrucao 
+            if(palavraControleString.charAt(0) == DEMARCADOR_CODIGO_OPERACAO) {
+                auxiliar = new Scanner(palavraControleString.replaceAll("\\D", ""));
+                this.enderecoIntrucao.put(auxiliar.nextInt(), indiceLinha);
+                continue;
+            }
+            indiceLinha++;
             
-            auxiliar = new Scanner(palavraControle);
+            auxiliar = new Scanner(palavraControleString);
             
-            this.firmware[indiceLinha].jumpEntradaP1(this.valorBooleano(auxiliar.nextInt()));
-            this.firmware[indiceLinha].jumpSaidaP1(this.valorBooleano(auxiliar.nextInt()));
-            this.firmware[indiceLinha].jumpSaidaP2(this.valorBooleano(auxiliar.nextInt()));
+            PalavraControle palavraControle = new PalavraControle(NUMERO_SINAIS_CONTROLE);
+            
+            palavraControle.jumpEntradaP1(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.jumpSaidaP1(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.jumpSaidaP2(this.valorBooleano(auxiliar.nextInt()));
             //this.firmware[indiceLinha][INDICE_FLAG_ENTRADA_P1] = auxiliar.nextInt();
             //this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P1] = auxiliar.nextInt();
             //this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P2] = auxiliar.nextInt();
             
-            boolean[] sinaisDeControle = new boolean[NUMERO_SINAIS_CONTROLE];
-            
-            for(int i = 0; i < sinaisDeControle.length; i++)
-                sinaisDeControle[i] = this.valorBooleano(auxiliar.nextInt());
-            this.firmware[indiceLinha].sinaisDeControle(sinaisDeControle);
+            for(int i = 0; i < NUMERO_SINAIS_CONTROLE; i++)
+                 palavraControle.sinalDeControle(i, this.valorBooleano(auxiliar.nextInt()));
             //for(int i = 0; i < NUMERO_SINAIS_CONTROLE; i++)
                // this.firmware[indiceLinha][INDICE_SINAIS_CONTROLE + i] = auxiliar.nextInt();
             
-            this.firmware[indiceLinha].operacaoULA(auxiliar.nextInt());
-            this.firmware[indiceLinha].operacaoRAM(auxiliar.nextInt());
+            palavraControle.operacaoULA(auxiliar.nextInt());
+            palavraControle.operacaoRAM(auxiliar.nextInt());
             //this.firmware[indiceLinha][INDICE_SINAIS_ULA] = auxiliar.nextInt();
             //this.firmware[indiceLinha][INDICE_SINAIS_MEMORIA] = auxiliar.nextInt();
             
-            this.firmware[indiceLinha].jumpIncondicional(this.valorBooleano(auxiliar.nextInt()));
-            this.firmware[indiceLinha].jumpZero(this.valorBooleano(auxiliar.nextInt()));
-            this.firmware[indiceLinha].jumpOverflow(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.jumpIncondicional(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.jumpZero(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.jumpNegativo(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.jumpPositivo(this.valorBooleano(auxiliar.nextInt()));
             
             //this.firmware[indiceLinha][INDICE_JUMP_INCONDICIONAL] = auxiliar.nextInt();
             //this.firmware[indiceLinha][INDICE_JUMP_ZERO] = auxiliar.nextInt();
             //this.firmware[indiceLinha][INDICE_JUMP_OVERFLOW] = auxiliar.nextInt();
             
-            this.firmware[indiceLinha].lerIR(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.lerIR(this.valorBooleano(auxiliar.nextInt()));
             
-            this.firmware[indiceLinha].enderecoJump(auxiliar.nextInt());
+            palavraControle.enderecoJump(auxiliar.nextInt());
             //this.firmware[indiceLinha][INDICE_ENDERECO_JUMP] = auxiliar.nextInt();
             
-            indiceLinha++;
+            this.firmware.add(palavraControle);
         }
+        
+        this.numeroPalavras = this.firmware.size();
     }
     
     public PalavraControle ler(int endereco) {
-        return this.firmware[endereco];
+        return this.firmware.get(endereco);
+    }
+    
+    public int enderecoInstrucao(int opcode) {
+        return this.enderecoIntrucao.get(opcode);
     }
 }

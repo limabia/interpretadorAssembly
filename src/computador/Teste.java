@@ -1,9 +1,12 @@
 package computador;
 
 import computador.componentes.Barramento;
+import computador.componentes.PalavraControle;
+import computador.firmware.Firmware;
 import computador.componentes.RAM;
 import computador.componentes.Registrador;
 import computador.conexao.ConexaoBinaria;
+import computador.firmware.FirmwareException;
 
 /**
  *
@@ -232,6 +235,90 @@ public class Teste {
             System.out.println("\n");
         }
         
+        /* ########################### TESTE DA UC ########################### */
+        
+        
+        String arquivo = "#########################################################################\n" +
+"# Estrutura da palavra de horizontal\n" +
+"#\n" +
+"# [0][1][2] [3] [4] [5] [6][7][8] [9]\n" +
+"#\n" +
+"# Legenda:\n" +
+"#\n" +
+"# 0: flag para o uso da entrada P1 (1 = usa, 0 = nao usa)\n" +
+"# 1: flag para o uso da saida P1\n" +
+"# 2: flag para o uso da saida P2\n" +
+"#\n" +
+"# 3: sinais de controle\n" +
+"#\n" +
+"# 4: $ sinais de operacao para ULA\n" +
+"#    0: incrementar\n" +
+"#    1: incrementar (comp 2)\n" +
+"#    2: somar\n" +
+"#    3: somar (comp 2)\n" +
+"#    4: subtrair (comp 2)\n" +
+"#    5: multiplicar (comp 2)\n" +
+"#    6: dividir (comp 2)\n" +
+"#\n" +
+"# 5: @ sinais de operacao para RAM\n" +
+"#    0: endereco valido\n" +
+"#    1: escrever\n" +
+"#    2: ler\n" +
+"#\n" +
+"# Condicoes do JUMP\n" +
+"# 6: I jump incondicional\n" +
+"# 7: Z jump zero\n" +
+"# 8: O overflow\n" +
+"#\n" +
+"# 9: & flag para a leitura do endereco da operacao no IR\n" +
+"#\n" +
+"#10: % endereco da microinstrucao em caso de jump\n" +
+"#\n" +
+"#\n" +
+"# PADRAO:\n" +
+"# FLAGS				SINAIS DE CONTROLE\n" +
+"# 0 0 0   0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0   $   @   I Z O   &   %\n" +
+"#\n" +
+"#########################################################################\n" +
+"\n" +
+"#################### CICLO DE BUSCA #################### \n" +
+"\n" +
+"# 0 0 0   0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0   $   @   I Z O   &   %\n" +
+"\n" +
+"#T1:	MAR <- PC\n" +
+"#	ULA <- PC\n" +
+"#	ULA++\n" +
+"\n" +
+"################## CICLO DE INDIRECAO ################## \n" +
+"\n" +
+"\n" +
+"################## CICLO DE EXECUCAO ###################\n" +
+"\n" +
+"# MOV\n" +
+"$ OPCODE 1 MOV\n" +
+"0 1 0   0 0 0 0 0 0 1 1 1 0 0 0 0 0 0  0 0 0 0 0  1 0 0 0 0 1 0 0 1 1   0   4   1 0 0   0   0\n" +
+"0 1 0   1 0 0 0 0 0 1 1 1 0 0 0 0 0 0  0 0 1 0 0  1 0 0 0 0 1 0 0 1 1   5   0   1 0 0   0   0\n" +
+"0 1 0   0 0 0 0 0 0 1 1 1 0 0 0 0 0 0  0 1 0 1 0  1 0 0 0 0 1 0 0 1 1   0   6   1 0 0   0   0\n" +
+"0 1 0   0 0 0 0 0 0 1 1 1 0 0 0 0 0 0  1 0 0 0 1  1 0 0 0 0 1 0 0 1 1   7   0   1 0 0   0   0\n" +
+"\n" +
+"\n" +
+"";
+
+        Firmware firmware = null;
+        
+        try {
+            firmware = new Firmware(arquivo);
+            
+        } catch(FirmwareException fe) {
+            System.out.println(fe.getMessage());
+        }
+        
+        firmware.ler(0).imprimir();
+        firmware.ler(1).imprimir();
+        firmware.ler(2).imprimir();
+        firmware.ler(3).imprimir();
+        
+        firmware.ler(firmware.enderecoInstrucao(1)).imprimir();
     }
     
 }

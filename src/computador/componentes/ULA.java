@@ -121,6 +121,24 @@ public class ULA implements Conectavel {
             
             case 2: // incrementar (comp 2)
                 
+                // Verifica o bit de sinal antes da operacao
+                int sinal = operando1.lerBit(0);
+                
+                int[] aux = operando1.ler();
+                
+                int valorAnterior;
+                int excesso = 1;
+                for(int i = aux.length - 1; i >= 0 && excesso == 1; i--) {
+                    valorAnterior = aux[i];
+                    aux[i] = (aux[i] + excesso) % 2;
+                    excesso = (valorAnterior + excesso) / 2;
+                }
+                
+                this.resultado.escrever(aux, 0);
+                
+                this.flagZero = valorZero(resultado.ler(0));
+                this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
+                
                 return true;    
                 
             case 3: // somar
@@ -148,6 +166,13 @@ public class ULA implements Conectavel {
         }
         
         return false; 
+    }
+    
+    private boolean valorZero(int[] binario) {
+        for(int bit : binario)
+            if(bit == 1)
+                return false;
+        return true;
     }
     
     /**

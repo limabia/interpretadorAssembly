@@ -18,8 +18,8 @@ public class Barramento implements Conectavel {
     private int[] binario;
     
     // Conjuntos de conexoes envolvendo o Barramento
-    private ArrayList<ConexaoBinaria> entradas; //Conexoes no qual o Barramento eh o destino
-    private ArrayList<ConexaoBinaria> saidas; // Conexoes no qual o Barramento eh a origem
+    private final ArrayList<ConexaoBinaria> entradas; // Conexoes no qual o Barramento eh o destino
+    private final ArrayList<ConexaoBinaria> saidas; // Conexoes no qual o Barramento eh a origem
     
     
     
@@ -31,8 +31,8 @@ public class Barramento implements Conectavel {
     public Barramento(int tamanho) {
         this.binario = new int[tamanho];
 
-        this.entradas = new ArrayList<ConexaoBinaria>();        
-        this.saidas = new ArrayList<ConexaoBinaria>();
+        this.entradas = new ArrayList();        
+        this.saidas = new ArrayList();
     }
     
     
@@ -54,7 +54,7 @@ public class Barramento implements Conectavel {
             conexao.conectar();
             conexao.fechar();
         }
-        // Ativa as conexoes de leem do barramento
+        // Ativa as conexoes que leem do barramento
         conexoes = this.saidas.iterator();
         while(conexoes.hasNext()) {
             conexao = conexoes.next();

@@ -23,7 +23,7 @@ public class Binario {
         
         // Soma um
         int excesso = 1;
-        for(int i = binario.length; i >= 0; i++) {
+        for(int i = binario.length - 1; i >= 0; i--) {
             novoBinario[i] = (binario[i] + excesso) / 2;
             excesso = (binario[i] + excesso) % 2;
         }
@@ -37,7 +37,7 @@ public class Binario {
      * @param binario Numero binario em complemento de dois
      * @return Representacao decimal do numero em complemento de dois
      */
-    public static int valorInteiro(int[] binario) {
+    public static int valorInteiroComplementoDeDois(int[] binario) {
         boolean negativo = (binario[0] == 1);
         
         // Caso o numero seja negativo eh necessario calcular o complemento de dois
@@ -59,4 +59,22 @@ public class Binario {
         return valor;
     }
     
+    /**
+     * Converte um numero binario em decimal.
+     * 
+     * @param binario Numero binario
+     * @return Valor decimal
+     */
+    public static int valorInteiro(int[] binario) {
+        
+        // Calcula o valor inteiro absoluto do binario 
+        int potencia = 1;
+        int valor = 0;
+        for(int i = binario.length - 1; i >= 0; i--) {
+            valor += potencia * binario[i];
+            potencia *= 2;
+        }
+        
+        return valor;
+    }
 }

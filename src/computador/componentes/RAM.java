@@ -1,7 +1,6 @@
 package computador.componentes;
 
 import computador.base_numerica.Binario;
-import computador.conexao.Conectavel;
 import computador.conexao.ConexaoBinaria;
 import java.util.HashMap;
 
@@ -13,13 +12,13 @@ import java.util.HashMap;
  * 
  * Data: 31-05-2018
  */
-public class RAM implements Conectavel {
+public class RAM implements MemoriaPrimaria {
     
     // Representacao da mamoria
     private final HashMap<Integer, int[]> MEMORIA;
  
     // Registrador para armazenamento temporario de enderecoes e dados
-    private final Registrador BUFFER;
+    public final Registrador BUFFER;
     
     // Limites inclusivos para o endereco 
     private final int ENDERECO_MINIMO;
@@ -27,8 +26,6 @@ public class RAM implements Conectavel {
     
     // Endereco no qual um valor deve ser lido ou escrito
     private int endereco;
-    
-    
     
     /**
      * Istancia um objeto RAM criando um buffer com o tamanho indicado e tendo
@@ -95,6 +92,10 @@ public class RAM implements Conectavel {
         }
     }
     
+    public void escreverBuffer(int[] binario) {
+        this.BUFFER.escrever(binario);
+    }
+    
     /**
      * Verifica se o binario que esta salvo no Registrador buffer eh um endereco
      * valido. Caso seja, salva seu valor inteiro no atributo 'endereco' e retorna
@@ -105,7 +106,7 @@ public class RAM implements Conectavel {
      */
     public boolean enderecoValido() {
 
-        int valor = Binario.valorInteiro(BUFFER.ler());
+        int valor = Binario.valorInteiroComplementoDeDois(BUFFER.ler());
         
         if(valor < this.ENDERECO_MINIMO || valor > this.ENDERECO_MAXIMO)
             return false; // Endereco invalido

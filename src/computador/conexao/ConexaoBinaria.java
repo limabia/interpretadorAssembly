@@ -156,7 +156,7 @@ public class ConexaoBinaria {
      * @return 'true' caso a porta esteja aberta, 'false' caso nao esteja.
      */
     public boolean aberta() {
-        return this.aberta();
+        return this.aberta;
     }
     
     /**

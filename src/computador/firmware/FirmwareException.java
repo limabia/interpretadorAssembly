@@ -1,4 +1,6 @@
-package computador.componentes;
+package computador.firmware;
+
+import computador.componentes.ComponentException;
 
 /**
  *

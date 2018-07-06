@@ -1,5 +1,7 @@
 package computador.componentes;
 
+import java.util.ArrayList;
+
 /**
  *
  * 
@@ -10,21 +12,52 @@ public class PalavraControle {
     private boolean jumpSaidaP1;
     private boolean jumpSaidaP2;
     
-    private boolean[] sinaisDeControle;
+    private ArrayList<Boolean> sinaisDeControle;
     
     private int codigoOperacaoULA;
     private int codigoOperacaoRAM;
     
     private boolean jumpIncondicional;
     private boolean jumpZero;
+    private boolean jumpNegativo;
+    private boolean jumpPositivo;
     private boolean jumpOverflow;
     
     private boolean lerIR;
     private int enderecoJump;
     
     // DEBUGG
+    public int v(boolean a) {
+        if(a)
+            return 1;
+        else
+            return 0;
+    }
+    
     public void imprimir() {
+        System.out.print(v(jumpEntradaP1) + " ");
+        System.out.print(v(jumpSaidaP1) + " ");
+        System.out.print(v(jumpSaidaP2) + "   ");
         
+        sinaisDeControle.stream().forEach((sinal) -> {
+            System.out.print(v(sinal) + " ");
+        });
+        
+        System.out.print("  " + codigoOperacaoULA + "   " + codigoOperacaoRAM + "   ");
+        
+        System.out.print(v(jumpIncondicional) + " ");
+        System.out.print(v(jumpZero) + " ");
+        System.out.print(v(jumpNegativo) + " ");
+        System.out.print(v(jumpPositivo) + " ");
+        //System.out.print(v(jumpOverflow) + "   ");
+        
+        System.out.print(v(lerIR) + "   ");
+        
+        System.out.println(enderecoJump);
+    }
+    
+    public PalavraControle(int numeroSinaisControle) {
+        this.sinaisDeControle = new ArrayList(numeroSinaisControle);
     }
     
     //DOCUMENTAR ISSO DPS
@@ -53,20 +86,8 @@ public class PalavraControle {
         return this.jumpSaidaP2;
     }
     
-    /**
-     * Define um conjunto de sinais de controle booleanas
-     * 
-     * @param sinaisDeControle Sinais de controle
-     */
-    public void sinaisDeControle(boolean[] sinaisDeControle) {
-        this.sinaisDeControle = sinaisDeControle;
-    }
-    
     public void sinalDeControle(int indice, boolean status) {
-        if(indice < 0 || indice >= this.sinaisDeControle.length)
-            throw new IllegalArgumentException("Indice invalido");
-        
-        this.sinaisDeControle[indice] = status;
+        this.sinaisDeControle.add(indice, status);
     }
     
     /**
@@ -75,11 +96,8 @@ public class PalavraControle {
      * @param indice Indice do sinal de controle
      * @return Valor booleano do sinal de controle
      */
-    public boolean sinalDeControle(int indice) {
-        if(indice < 0 || indice >= this.sinaisDeControle.length)
-            throw new IllegalArgumentException("Indice invalido");
-        
-        return this.sinaisDeControle[indice];
+    public boolean sinalDeControle(int indice) {        
+        return this.sinaisDeControle.get(indice);
     }
     
     /**
@@ -161,21 +179,39 @@ public class PalavraControle {
     }
     
     /**
-     * Setter para a flag de jump overflow
+     * Setter para a flag de jump negativo
      * 
-     * @param status Valor boolean da flag
+     * @param status Valor booleano da flag
      */
-    public void jumpOverflow(boolean status) {
-        this.jumpOverflow = status;
+    public void jumpNegativo(boolean status) {
+        this.jumpNegativo = status;
     }
     
     /**
-     * Getter para a flag de jump overflow
+     * Getter para a flag de jump negativo
      * 
      * @return Valor booleano da flag
      */
-    public boolean jumpOverflow() {
-        return this.jumpOverflow;
+    public boolean jumpNegativo() {
+        return this.jumpNegativo;
+    }
+    
+    /**
+     * Setter para a flag de jump positivo
+     * 
+     * @param status Valor booleano da flag
+     */
+    public void jumpPositivo(boolean status) {
+        this.jumpPositivo = status;
+    }
+    
+    /**
+     * Getter para a flag de jump positivo
+     * 
+     * @return Valor booleano da flag
+     */
+    public boolean jumpPositivo() {
+        return this.jumpPositivo;
     }
     
     /**
