@@ -101,16 +101,18 @@ public class ULA implements Conectavel {
     */
     public Registrador obterComplemento(Registrador operando){
         int[] normal = operando.ler();
-        int[] complementoDeDois = normal;
-        // onde tem 0 coloco 1 onde tem 1 coloco 0 
+        int[] complementoDeDois = new int[32];
+        // onde tem 0 coloca 1 onde tem 1 coloca 0 
         for (int i = 0; i < normal.length; i++) {
             if (normal[i] == 1) {
                 complementoDeDois[i] = 0;
             } else if (normal[i] == 0) {
                 complementoDeDois[i] = 1;
             }
+            System.out.println("Complemento: " + complementoDeDois[i]);
         }
-        Registrador Um = new Registrador(normal.length);
+        
+        Registrador Um = new Registrador(1);
         Um.escrever(new int[] {1});
         operando.escrever(complementoDeDois);
         operando = soma(operando, Um);
@@ -123,17 +125,20 @@ public class ULA implements Conectavel {
     public Registrador soma(Registrador operando, Registrador segundoOperando){
         int[] num1 = operando.ler();
         int[] num2 = segundoOperando.ler();
-        int[] resultadoSoma = num1;
+        int[] resultadoSoma = new int [32];
         int sobe = 0;
-
-        for (int i = num2.length-1; i >= 0; i--){
-                   
+        int tam;
+        
+        if(num1.length <= num2.length) tam = num1.length;
+        else tam = num2.length;
+        
+        for (int i = tam-1; i >= 0; i--){
             int bit1 = num1[i];
             int bit2 = num2[i];
             int soma = bit1 + bit2 + sobe;
             resultadoSoma[i] = soma % 2;
-                sobe = soma / 2;
-                System.out.println("Resultado Soma: " + resultadoSoma[i]);
+            sobe = soma / 2;
+            System.out.println("Resultado Soma: " + resultadoSoma[i]);
         }
         this.resultado.escrever(resultadoSoma);
                
@@ -156,7 +161,7 @@ public class ULA implements Conectavel {
      *         seja.
      */
     public boolean operar(int codigoOperacao) {
-        codigoOperacao = 4;
+        codigoOperacao = 5;
         segundoOperando = new Registrador(5);
         operando1 = new Registrador(5);
         operando1.escrever(new int[] {0,0,0,0,1});
@@ -195,6 +200,7 @@ public class ULA implements Conectavel {
                 
             case 3: // somar
                 soma(operando1, segundoOperando);
+                
                 return true;    
                 
                 
@@ -205,7 +211,8 @@ public class ULA implements Conectavel {
                 return true;
                 
             case 5: // subtrair (comp 2)
-                
+                segundoOperando = obterComplemento(segundoOperando);
+                soma(operando1, segundoOperando);
                 return true;
                 
             case 6: // multiplicar (comp 2)
