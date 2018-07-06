@@ -77,26 +77,11 @@ public class Firmware {
      * @throws FileNotFoundException Arquivo nao encontrado
      */
     private void carregar(String nomeArquivoFirmware) throws FileNotFoundException{
-        //Scanner arquivoFirmware = new Scanner(new File(nomeArquivoFirmware));
-        Scanner arquivoFirmware = new Scanner(nomeArquivoFirmware);
+        Scanner arquivoFirmware = new Scanner(new File(nomeArquivoFirmware));
+        //Scanner arquivoFirmware = new Scanner(nomeArquivoFirmware);
         Scanner auxiliar;
         String palavraControleString = "0";
         int indiceLinha = 0;
-        
-        // Procura a linha com o numero de palavras de controle do microprograma
-        /*while(arquivoFirmware.hasNextLine()) {
-            palavraControle = arquivoFirmware.nextLine();
-            
-            // Caso a linha nao esteja vazia e nao seja de comentario para a busca
-            if(palavraControle.length() != 0 && 
-                    palavraControle.charAt(0) != DEMARCADOR_COMENTARIO)
-                break;
-        }
-        
-        if(!arquivoFirmware.hasNextLine())
-            return;*/
-        
-        //numeroPalavras = new Scanner(palavraControle).nextInt();
         
         // Salva o microprograma em uma matriz
         while(arquivoFirmware.hasNextLine()) {
@@ -122,33 +107,21 @@ public class Firmware {
             palavraControle.jumpEntradaP1(this.valorBooleano(auxiliar.nextInt()));
             palavraControle.jumpSaidaP1(this.valorBooleano(auxiliar.nextInt()));
             palavraControle.jumpSaidaP2(this.valorBooleano(auxiliar.nextInt()));
-            //this.firmware[indiceLinha][INDICE_FLAG_ENTRADA_P1] = auxiliar.nextInt();
-            //this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P1] = auxiliar.nextInt();
-            //this.firmware[indiceLinha][INDICE_FLAG_SAIDA_P2] = auxiliar.nextInt();
             
             for(int i = 0; i < NUMERO_SINAIS_CONTROLE; i++)
                  palavraControle.sinalDeControle(i, this.valorBooleano(auxiliar.nextInt()));
-            //for(int i = 0; i < NUMERO_SINAIS_CONTROLE; i++)
-               // this.firmware[indiceLinha][INDICE_SINAIS_CONTROLE + i] = auxiliar.nextInt();
             
             palavraControle.operacaoULA(auxiliar.nextInt());
             palavraControle.operacaoRAM(auxiliar.nextInt());
-            //this.firmware[indiceLinha][INDICE_SINAIS_ULA] = auxiliar.nextInt();
-            //this.firmware[indiceLinha][INDICE_SINAIS_MEMORIA] = auxiliar.nextInt();
             
             palavraControle.jumpIncondicional(this.valorBooleano(auxiliar.nextInt()));
             palavraControle.jumpZero(this.valorBooleano(auxiliar.nextInt()));
             palavraControle.jumpNegativo(this.valorBooleano(auxiliar.nextInt()));
             palavraControle.jumpPositivo(this.valorBooleano(auxiliar.nextInt()));
             
-            //this.firmware[indiceLinha][INDICE_JUMP_INCONDICIONAL] = auxiliar.nextInt();
-            //this.firmware[indiceLinha][INDICE_JUMP_ZERO] = auxiliar.nextInt();
-            //this.firmware[indiceLinha][INDICE_JUMP_OVERFLOW] = auxiliar.nextInt();
-            
             palavraControle.lerIR(this.valorBooleano(auxiliar.nextInt()));
             
             palavraControle.enderecoJump(auxiliar.nextInt());
-            //this.firmware[indiceLinha][INDICE_ENDERECO_JUMP] = auxiliar.nextInt();
             
             this.firmware.add(palavraControle);
         }
