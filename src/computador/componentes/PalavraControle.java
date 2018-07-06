@@ -8,9 +8,9 @@ import java.util.ArrayList;
  */
 public class PalavraControle {
     
-    private boolean jumpEntradaP1;
-    private boolean jumpSaidaP1;
-    private boolean jumpSaidaP2;
+    private boolean flagEntradaP1;
+    private boolean flagSaidaP1;
+    private boolean flagSaidaP2;
     
     private ArrayList<Boolean> sinaisDeControle;
     
@@ -21,37 +21,44 @@ public class PalavraControle {
     private boolean jumpZero;
     private boolean jumpNegativo;
     private boolean jumpPositivo;
-    private boolean jumpOverflow;
+    //private boolean jumpOverflow;
     
     private boolean lerIR;
     private int enderecoJump;
     
     // DEBUGG
-    public int v(boolean a) {
+    public int valor(boolean a) {
         if(a)
             return 1;
         else
             return 0;
     }
     
+    public String valorString(boolean status) {
+        if(status)
+            return "1";
+        else
+            return "0";
+    }
+    
     public void imprimir() {
-        System.out.print(v(jumpEntradaP1) + " ");
-        System.out.print(v(jumpSaidaP1) + " ");
-        System.out.print(v(jumpSaidaP2) + "   ");
+        System.out.print(valor(flagEntradaP1) + " ");
+        System.out.print(valor(flagSaidaP1) + " ");
+        System.out.print(valor(flagSaidaP2) + "   ");
         
         sinaisDeControle.stream().forEach((sinal) -> {
-            System.out.print(v(sinal) + " ");
+            System.out.print(valor(sinal) + " ");
         });
         
         System.out.print("  " + codigoOperacaoULA + "   " + codigoOperacaoRAM + "   ");
         
-        System.out.print(v(jumpIncondicional) + " ");
-        System.out.print(v(jumpZero) + " ");
-        System.out.print(v(jumpNegativo) + " ");
-        System.out.print(v(jumpPositivo) + " ");
+        System.out.print(valor(jumpIncondicional) + " ");
+        System.out.print(valor(jumpZero) + " ");
+        System.out.print(valor(jumpNegativo) + " ");
+        System.out.print(valor(jumpPositivo) + " ");
         //System.out.print(v(jumpOverflow) + "   ");
         
-        System.out.print(v(lerIR) + "   ");
+        System.out.print(valor(lerIR) + "   ");
         
         System.out.println(enderecoJump);
     }
@@ -60,30 +67,57 @@ public class PalavraControle {
         this.sinaisDeControle = new ArrayList(numeroSinaisControle);
     }
     
+    
+    public String[] obterString() {
+        String[] string = new String[12];
+        
+        string[0] = this.valorString(flagEntradaP1);
+        string[1] = this.valorString(flagSaidaP1);
+        string[2] = this.valorString(flagSaidaP2);
+        
+        string[3] = "";
+        for(boolean statusPorta : sinaisDeControle)
+            string[3] += this.valorString(statusPorta);
+                
+        string[4] = Integer.toString(codigoOperacaoULA);
+        string[5] = Integer.toString(codigoOperacaoRAM);
+        
+        string[6] = this.valorString(jumpIncondicional);
+        string[7] = this.valorString(jumpZero);
+        string[8] = this.valorString(jumpNegativo);
+        string[9] = this.valorString(jumpPositivo);
+        
+        string[10] = this.valorString(lerIR);
+        
+        string[11] = Integer.toString(enderecoJump);
+        
+        return string;
+    }
+    
     //DOCUMENTAR ISSO DPS
     
     public void jumpEntradaP1(boolean status) {
-        this.jumpEntradaP1 = status;
+        this.flagEntradaP1 = status;
     }
     
     public boolean jumpEntradaP1() {
-        return this.jumpEntradaP1;
+        return this.flagEntradaP1;
     }
     
     public void jumpSaidaP1(boolean status) {
-        this.jumpSaidaP1 = status;
+        this.flagSaidaP1 = status;
     }
     
     public boolean jumpSaidaP1() {
-        return this.jumpSaidaP1;
+        return this.flagSaidaP1;
     }
     
     public void jumpSaidaP2(boolean status) {
-        this.jumpSaidaP2 = status;
+        this.flagSaidaP2 = status;
     }
     
     public boolean jumpSaidaP2() {
-        return this.jumpSaidaP2;
+        return this.flagSaidaP2;
     }
     
     public void sinalDeControle(int indice, boolean status) {

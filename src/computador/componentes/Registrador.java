@@ -56,6 +56,23 @@ public class Registrador implements Conectavel {
     
     
     
+    @Override
+    public String toString() {
+        
+        String conteudo = "";
+        
+        for(int i = 0; i < this.binario.length; i++) {
+            int j;
+            for(j = 0; j < this.binario[i].length - 1; j++) {
+                conteudo += (this.binario[i][j]);
+            }
+            if(j < this.binario[i].length)
+                conteudo += this.binario[i][j];
+        }
+        
+        return conteudo;
+    }
+    
     /**
      * Retorna o tamanho do registrador. Caso o registrador possua mais de uma
      * particao, isto eh, eh composto por mais de um vetor de inteiros, entao
@@ -90,16 +107,18 @@ public class Registrador implements Conectavel {
      *         registrador seja menor do que o tamanho necessario
      */
     public boolean escrever(int[] binario) {
+        
         if(binario.length > TAMANHO)
             return false;
         
-        int t = this.TAMANHO - 1;
+        int t = binario.length - 1;
         
         int j, i = this.binario.length - 1;
         while(i >= 0 && t >= 0) {
             j = this.binario[i].length - 1;
-            while(j >= 0 && t >= 0)
+            while(j >= 0 && t >= 0) {
                 this.binario[i][j--] = binario[t--];
+            }
             i--;
         }
         

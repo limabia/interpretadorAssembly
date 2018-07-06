@@ -82,6 +82,7 @@ public class UC {
     }
     
     public int portaDecoder(int porta, boolean entrada) {
+        System.out.println("VALOR SENDO SUUUITADO: " + porta + " ---------------");
         switch (porta) {
     
             case 19: // AX
@@ -109,6 +110,7 @@ public class UC {
                     return 24;
             
             default:
+                System.out.println("Deu ruim ao abrir a porta: " + porta);
                 return -1;
         }
     }
@@ -123,15 +125,23 @@ public class UC {
         // Le uma palavra de controle
         this.CBR = this.firmware.ler(this.CAR);
         
+        // Verifica as condicoes de jump
         if(this.CBR.jumpEntradaP1())
-            this.CBR.sinalDeControle(this.portaEntradaP1, true);
+            //this.CBR.sinalDeControle(this.portaEntradaP1, true);
+            this.conexoes[this.portaEntradaP1].abrir();
           
         if(this.CBR.jumpSaidaP1())
-            this.CBR.sinalDeControle(this.portaSaidaP1, true);
+            //this.CBR.sinalDeControle(this.portaSaidaP1, true);
+            this.conexoes[this.portaSaidaP1].abrir();
         
         if(this.CBR.jumpSaidaP2())
-            this.CBR.sinalDeControle(this.portaSaidaP2, true);
+            //this.CBR.sinalDeControle(this.portaSaidaP2, true);
+            this.conexoes[this.portaSaidaP2].abrir();
 
+        // Se for uma operacao de leitura eh necessario executar antes
+        if(this.CBR.operacaoRAM() == this.memoriaPrimaria.codigoOperacaoLer())
+            this.memoriaPrimaria.operar(this.CBR.operacaoRAM());
+        
         // Abre as postas
         for(int i = 0; i < this.conexoes.length; i++)
             if(this.CBR.sinalDeControle(i))
@@ -143,19 +153,21 @@ public class UC {
         
         // Interpreta os sinais da ULA e da RAM
         this.ULA.operar(this.CBR.operacaoULA());
-        this.memoriaPrimaria.operar(this.CBR.operacaoRAM());
+        
+        // Se nao for uma operacao de leitura eh necessario executar depois
+        if(this.CBR.operacaoRAM() != this.memoriaPrimaria.codigoOperacaoLer())
+            this.memoriaPrimaria.operar(this.CBR.operacaoRAM());
         
         if(this.CBR.lerIR()) {
-            //System.out.println(this.IR == null);
             int enderecoInstrucao = Binario.valorInteiro(this.IR.ler(0));
             this.CBR.enderecoJump(this.firmware.enderecoInstrucao(enderecoInstrucao));
             
             this.portaEntradaP1 = portaDecoder(Binario.valorInteiro(this.IR.ler(1)), true);
             this.portaSaidaP1 = portaDecoder(Binario.valorInteiro(this.IR.ler(1)), false);
             this.portaSaidaP2 = portaDecoder(Binario.valorInteiro(this.IR.ler(2)), false);
-            
         }
             
+        // ARRUMAR ESSES JUMPS PARA CHECAREM A ULA
         if(this.CBR.jumpIncondicional() || this.CBR.jumpZero() || 
                 this.CBR.jumpNegativo() || this.CBR.jumpPositivo())
             this.CAR = this.CBR.enderecoJump();
@@ -164,87 +176,14 @@ public class UC {
         
     }
     
-    /*public void iniciarCiclo() {
-        int CAR; // Control Address Register
-        int[] CBR = null; // Control Buffer Register
-        
-        // Transforma o opcode da isntrucao do IR em um endereco do microprograma
-        CAR = decoderOpcode(this.IR.ler(0));
-        
-        // Indices das portas dos Registradores operandos
-        int portaEntraP1 = -1;
-        int portaSaidaP1 = -1;
-        int portaSaidaP2 = -1;
-        
-        // 0 - Busca
-        // 1 - Indirecao
-        // 2 - Execucao
-        int ICC = 0;
-        
-        while(CAR > 0) {
-               
-            // Calcula proximo endereco
-            {
-                if(CBR[0] == 1)
-                    CAR = decoderOpcode(this.IR.ler(0));
-                
-                else if(CBR[Firmware.INDICE_JUMP_INCONDICIONAL] == 1)
-                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
-                
-                else if(CBR[Firmware.INDICE_JUMP_OVERFLOW] == 1 && this.ULA.flagOverflow())
-                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
-                
-                else if(CBR[Firmware.INDICE_JUMP_ZERO] == 1 & this.ULA.flagZero())
-                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
-                
-                else
-                    CAR++;
-                    
-            }
-            
-            CBR = this.firmware.ler(CAR);
-            
-            if(CBR[Firmware.INDICE_FLAG_ENTRADA_P1] == 1)
-                CBR[portaEntraP1] = 1;
-            
-            if(CBR[Firmware.INDICE_FLAG_SAIDA_P1] == 1)
-                CBR[portaSaidaP1] = 1;
-            
-            if(CBR[Firmware.INDICE_FLAG_SAIDA_P2] == 1)
-                CBR[portaSaidaP2] = 1;
-            
-            if(CBR[Firmware.INDICE_SINAIS_MEMORIA] == 2) // Ler
-                this.RAM.ler();
-            
-            for(int i = Firmware.INDICE_SINAIS_CONTROLE; i < Firmware.INDICE_SINAIS_CONTROLE + Firmware.NUMERO_SINAIS_CONTROLE; i++)
-                if(CBR[i] == 1)
-                    this.conexoes[i - Firmware.NUMERO_SINAIS_CONTROLE].abrir();
-            
-            // Interpreta os sinais da ULA
-            this.ULA.operar(CBR[Firmware.INDICE_SINAIS_ULA]);
-            
-            this.RAM.operar(CBR[Firmware.INDICE_SINAIS_MEMORIA]);
-            
-            // Dispara a movimentacao dos dados
-            barramento.conectar();
-            
-            // Calcula proximo endereco
-            {
-                if(CBR[Firmware.INDICE_JUMP_INCONDICIONAL] == 1)
-                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
-                
-                else if(CBR[Firmware.INDICE_JUMP_OVERFLOW] == 1 && this.ULA.flagOverflow())
-                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
-                
-                else if(CBR[Firmware.INDICE_JUMP_ZERO] == 1 & this.ULA.flagZero())
-                    CAR = CBR[Firmware.INDICE_ENDERECO_JUMP];
-                
-                else
-                    CAR++;
-                    
-            }
-            
-        }
-    }*/
-    
+    /**
+     * Devolve um vetor de bits com os elementos da palavra de controles agrupados
+     * em Strings, por exemplo, todos os sinais de controle das portas sao colocados
+     * juntos, enquanto as flags separadas.
+     * 
+     * @return Vetor de Strings contendo os bits da palavra de controle
+     */
+    public String[] obterStringPalavraControle() {
+        return this.CBR.obterString();
+    }
 }

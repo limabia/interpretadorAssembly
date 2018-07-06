@@ -59,8 +59,8 @@ public class CPU {
 "#########0 0 0 0 0 0 0 0 0##1 1 1 1 1 1 1 1 1 1##2 2 2 2 2 2 2 2 2 2##3#########################\n" +
 "#########1 2 3 4 5 6 7 8 9##0 1 2 3 4 5 6 7 8 9##0 1 2 3 4 5 6 7 8 9##0#########################\n" +
 " 0 0 0   0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 0 1 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   0 0 0 0  0   0\n" +
-" 0 0 0   1 0 1 0 0 0 0 0 1  0 0 0 0 0 0 0 1 0 0  0 0 0 0 0 0 0 0 0 0  0   2   1   0 0 0 0  0   0\n" +
-" 0 0 0   0 1 0 0 1 0 0 0 0  0 1 0 0 0 0 0 0 1 0  0 0 0 0 0 0 0 0 0 0  0   0   0   0 0 0 0  0   0\n" +
+" 0 0 0   1 0 1 0 0 0 0 0 0  1 0 0 0 0 0 0 1 0 0  0 0 0 0 0 0 0 0 0 0  0   2   1   0 0 0 0  0   0\n" +
+" 0 0 0   0 1 0 0 1 0 0 0 0  0 1 0 0 0 0 0 0 1 0  0 0 0 0 0 0 0 0 0 0  0   0   3   0 0 0 0  0   0\n" +
 " 0 0 0   0 0 0 0 0 0 0 1 0  0 0 0 0 1 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   0 0 0 0  0   0\n" +
 "\n" +
 "################################################################################################\n" +
@@ -70,38 +70,78 @@ public class CPU {
 "#########1 2 3 4 5 6 7 8 9##0 1 2 3 4 5 6 7 8 9##0 1 2 3 4 5 6 7 8 9##0#########################\n" +
 " 0 0 0   0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   1 0 0 0  1   0\n" +
 "\n" +
-"#       0 0 0 0 0 0 0 0 0  1 1 1 1 1 1 1 1 1 1  2 2 2 2 2 2 2 2 2 2  3\n" +
-"#       1 2 3 4 5 6 7 8 9  0 1 2 3 4 5 6 7 8 9  0 1 2 3 4 5 6 7 8 9  0\n" +
+"#        0 0 0 0 0 0 0 0 0  1 1 1 1 1 1 1 1 1 1  2 2 2 2 2 2 2 2 2 2  3\n" +
+"#        1 2 3 4 5 6 7 8 9  0 1 2 3 4 5 6 7 8 9  0 1 2 3 4 5 6 7 8 9  0\n" +
 "\n" +
 "$ OPCODE  0  (MOV REG,CONST)\n" +
-" 1 0 0   0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   1 0 0 0  0   0";
+" 1 0 0   0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   1 0 0 0  0   0\n" +
+"\n" +
+"$ OPCODE  1  (MOV REG,REG)\n" +
+" 1 0 1   0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   1 0 0 0  0   0\n" +
+"\n" +
+"$ OPCODE  2  (MOV REG,[CONST])\n" +
+" 0 0 0   0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   0 0 0 0  0   0\n" +
+" 0 0 0   1 0 1 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   1   0 0 0 0  0   0\n" +
+" 0 0 0   0 1 0 0 1 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   3   0 0 0 0  0   0\n" +
+" 1 0 0   0 0 0 0 0 0 0 1 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   1 0 0 0  0   0\n" +
+"\n" +
+"$ OPCODE  3  (MOV REG,[REG])\n" +
+" 0 0 1   0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   0 0 0 0  0   0\n" +
+" 0 0 0   1 0 1 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   1   0 0 0 0  0   0\n" +
+" 0 0 0   0 1 0 0 1 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   3   0 0 0 0  0   0\n" +
+" 1 0 0   0 0 0 0 0 0 0 1 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   1 0 0 0  0   0\n" +
+"\n" +
+"$ OPCODE  4  (MOV [REG],REG)\n" +
+" 0 1 0   0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   0 0 0 0  0   0\n" +
+" 0 0 1   1 0 1 0 0 0 1 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   1   0 0 0 0  0   0\n" +
+" 0 0 0   1 0 0 1 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   2   1 0 0 0  0   0\n" +
+"\n" +
+"$ OPCODE 5 (MOV [CONST], CONST)\n" +
+" 0 0 0   0 0 0 0 0 1 0 0 0  0 0 0 0 0 1 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   0   0 0 0 0  0   0\n" +
+" 0 0 0   1 0 1 0 0 0 1 0 0  0 0 0 0 0 0 1 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   1   0 0 0 0  0   0\n" +
+" 0 0 0   1 0 0 1 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0 0 0 0 0 0 0 0 0 0  0   0   2   1 0 0 0  0   0 \n" +
+"\n" +
+"\n" +
+"\n" +
+"\n" +
+"\n" +
+"\n" +
+"\n" +
+"";
     
-    UC UC;
+    private UC UC;
     
-    ULA ULA;
+    private ULA ULA;
     
-    Barramento barramento;
+    private Barramento barramento;
     
     /* ########################### REGISTRADORES ########################### */
     
     // Proposito geral
-    Registrador AX, BX, CX, DX;
+    private Registrador AX, BX, CX, DX;
     
     // Execucao da instrucao
-    Registrador IR, PC;
+    private Registrador IR, PC;
     
     // Buffer para ULA
-    Registrador T, AC;
+    private Registrador T, AC;
     
     // Se comunicam com o barramento externo
-    Registrador MAR, MBR;
+    private Registrador MAR, MBR;
+    
+    MemoriaPrimaria memoriaPrimaria;
     
     public CPU(int tamanhoPalavra, int tamanhoOP, int tamanhoParametro1,
             int tamanhoParametro2, Barramento barramentoExterno, 
             MemoriaPrimaria memoriaPrimaria) throws ComponentException {
     
+        this.memoriaPrimaria = memoriaPrimaria;
+        
+        // Cria o barramento interno
         this.barramento = new Barramento(tamanhoPalavra);
-        Barramento[] barramentos = {this.barramento, barramentoExterno};
+        
+        // Agrupa o barramento interno e externo em um vetor para salvar na UC
+        Barramento[] barramentos = {barramentoExterno, this.barramento};
         
         this.AX = new Registrador(tamanhoPalavra);
         this.BX = new Registrador(tamanhoPalavra);
@@ -109,15 +149,22 @@ public class CPU {
         this.DX = new Registrador(tamanhoPalavra);
         
         this.IR = new Registrador(tamanhoOP, tamanhoParametro1, tamanhoParametro2);
+        this.PC = new Registrador(tamanhoPalavra);
         
         this.T = new Registrador(tamanhoPalavra);
         this.AC = new Registrador(tamanhoPalavra, tamanhoPalavra);
         
+        this.MAR = new Registrador(tamanhoPalavra);
+        this.MBR = new Registrador(tamanhoPalavra);
+        
         this.ULA = new ULA(tamanhoPalavra, T, AC);
         
-        this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, MICROPORGRAMA_GAMTEMPORARIA);
+        String microprograma = (new java.io.File("").getAbsolutePath() + "/src/memoriaControle.txt");
+        //System.out.println("---------------------------" + microprograma);
+        this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, microprograma);
+        //this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, MICROPORGRAMA_GAMTEMPORARIA);
         
-        /* ######################### REGISTRADORES ######################### */
+        /* ############################ CONEXOES ############################ */
         
         ConexaoBinaria conexao;
         
@@ -213,31 +260,17 @@ public class CPU {
             this.barramento.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 14);
             
-            //conexao = new ConexaoBinaria(true);
-            
-            // Barramento --(00)--> (IR)P1
-            //this.barramento.definirComoOrigem(conexao);            
-            //this.IR.definirComoDestino(conexao, 1);
-            //UC.registrarConexao(conexao, 15);
-            
             conexao = new ConexaoBinaria(false);
             
             // (IR)P2 --(00)--> Barramento
             this.IR.definirComoOrigem(conexao, 2);            
             this.barramento.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 15);
-            
-            //conexao = new ConexaoBinaria(true);
-            
-            // Barramento --(00)--> (IR)P2
-            //this.barramento.definirComoOrigem(conexao);            
-            //this.IR.definirComoDestino(conexao);
-            //UC.registrarConexao(conexao, 15);
+
         }
         
         
         // PC
-        this.PC = new Registrador(tamanhoPalavra);
         {
             conexao = new ConexaoBinaria(true);
             
@@ -263,13 +296,7 @@ public class CPU {
             this.T.definirComoOrigem(conexao);            
             this.barramento.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 8);
-            
-            //conexao = new ConexaoBinaria(true);
 
-            // T --(00)--> Barramento
-            //this.barramento.definirComoOrigem(UC.obterConexao(0));            
-            //this.T.definirComoDestino(UC.obterConexao(0));
-            //UC.registrarConexao(conexao, 17);
         }
         
         // ULA
@@ -277,8 +304,9 @@ public class CPU {
             conexao = new ConexaoBinaria(true);
             
             // Barramento --(00)--> ULA
-            this.ULA.definirComoOrigem(conexao);            
-            this.barramento.definirComoDestino(conexao);
+            this.barramento.definirComoOrigem(conexao);            
+            this.ULA.definirComoDestino(conexao);
+            System.out.println("BARRAMENTO -> ULA " + conexao);
             UC.registrarConexao(conexao, 9);
         }
         
@@ -291,10 +319,6 @@ public class CPU {
             this.AC.definirComoOrigem(conexao, 0);            
             this.barramento.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 10);
-
-            // Barramento --(00)--> (AC)P1
-            //this.barramento.definirComoOrigem(UC.obterConexao(0));            
-            //this.AC.definirComoDestino(UC.obterConexao(0), 0);
             
             conexao = new ConexaoBinaria(true);
             
@@ -303,54 +327,49 @@ public class CPU {
             this.barramento.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 11);
             
-            // Barramento --(00)--> (AC)P2
-            //this.barramento.definirComoOrigem(UC.obterConexao(0));            
-            //this.AC.definirComoDestino(UC.obterConexao(0), 1);
         }
         
         // MAR
-        this.MAR = new Registrador(tamanhoPalavra);
         {
             conexao = new ConexaoBinaria(true);
             
             // MAR --(00)--> Barramento Externo
             this.MAR.definirComoOrigem(conexao);            
             barramentoExterno.definirComoDestino(conexao);
-            UC.registrarConexao(conexao, 5);
+            UC.registrarConexao(conexao, 2);
             
             conexao = new ConexaoBinaria(true);
             
-            // Barramento Externo --(00)--> MAR
-            barramentoExterno.definirComoOrigem(conexao);
+            // Barramento --(00)--> MAR
+            this.barramento.definirComoOrigem(conexao);
             this.MAR.definirComoDestino(conexao);
-            UC.registrarConexao(conexao, 2);
+            UC.registrarConexao(conexao, 5);
         }
         
         // MBR
-        this.MBR = new Registrador(tamanhoPalavra);
         {
-            conexao = new ConexaoBinaria(false);
+            conexao = new ConexaoBinaria(true);
             
             // MBR --(00)--> Barramento
             this.MBR.definirComoOrigem(conexao);            
             this.barramento.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 7);
             
-            conexao = new ConexaoBinaria(false);
+            conexao = new ConexaoBinaria(true);
 
             // Barramento --(00)--> MBR
             this.barramento.definirComoOrigem(conexao);            
             this.MBR.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 6);
             
-            conexao = new ConexaoBinaria(false);
+            conexao = new ConexaoBinaria(true);
             
             // MBR --(00)--> Barramento Externo
             this.MBR.definirComoOrigem(conexao);            
             barramentoExterno.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 3);
             
-            conexao = new ConexaoBinaria(false);
+            conexao = new ConexaoBinaria(true);
             
             // Barramento Externo --(00)--> MBR
             barramentoExterno.definirComoOrigem(conexao);
@@ -359,47 +378,39 @@ public class CPU {
         }
         
         {
-            conexao = new ConexaoBinaria(false);
+            conexao = new ConexaoBinaria(true);
             
             // Barramento Externo --(00)--> RAM
             memoriaPrimaria.definirComoDestino(conexao);
             barramentoExterno.definirComoOrigem(conexao);
             UC.registrarConexao(conexao, 0);
             
-            conexao = new ConexaoBinaria(false);
+            conexao = new ConexaoBinaria(true);
             
             // RAM --(00)--> Barramento Externo
             barramentoExterno.definirComoDestino(conexao);
             memoriaPrimaria.definirComoOrigem(conexao);
             UC.registrarConexao(conexao, 1);
+            
         }
       
     }
     
+    /**
+     * Executa um ciclo de clock
+     */
     public void clock() {
         this.UC.executarCiclo();
-        
-        System.out.println("Status dos registradores: ");
-        System.out.print("AX:  ");
-        Teste.imprimir(AX.ler());
-        System.out.print("\tBX:  ");
-        Teste.imprimir(BX.ler());
-        System.out.print("\nCX:  ");
-        Teste.imprimir(CX.ler());
-        System.out.print("\tDX:  ");
-        Teste.imprimir(DX.ler());
-        System.out.print("\nMAR: ");
-        Teste.imprimir(MAR.ler());
-        System.out.print("\tMBR: ");
-        Teste.imprimir(MBR.ler());
-        System.out.print("\nPC:  ");
-        Teste.imprimir(PC.ler());
-        System.out.print("\tIR:  ");
-        Teste.imprimir(IR.ler(0));
-        System.out.print(" | ");
-        Teste.imprimir(IR.ler(1));
-        System.out.print(" | ");
-        Teste.imprimir(IR.ler(2));
-        System.out.println();
+    }
+    
+    /**
+     * Devovle um objeto StatusCPU para fazer o monitoramento dos registradores
+     * da CPU e de seus componentes.
+     * 
+     * @return Objeto StatusCPU
+     */
+    public StatusCPU getStatusCPU() {
+        return new StatusCPU(this.AX, this.BX, this.CX, this.DX, this.IR, this.PC, 
+                this.T, this.AC, this.MAR, this.MBR, this.UC, this.ULA, this.memoriaPrimaria);
     }
 }

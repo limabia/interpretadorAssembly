@@ -43,11 +43,11 @@ public class ConexaoBinaria {
      *         ou 'false' caso nao seja.
      */
     public boolean definirOrigem(int[] origem) {
-        if(origem == null) return false;
+        if(origem == null) throw new IllegalArgumentException("Origem invalida");
         
         if(this.destino != null) {
-            if(origem.length > tamanhoDestino)
-                return false;
+            if(origem.length > this.tamanhoDestino)
+                throw new IllegalArgumentException("Tamanho da origem maior do que o destino");
         }
         
         this.origem = new int[1][];
@@ -65,7 +65,7 @@ public class ConexaoBinaria {
      *         ou 'false' caso nao seja.
      */
     public boolean definirOrigem(int[][] origem) {
-        if(origem == null) return false;
+        if(origem == null) throw new IllegalArgumentException("Origem invalida");
         
         int tamanhoOrigem = 0;
         for(int[] o : origem)
@@ -73,7 +73,7 @@ public class ConexaoBinaria {
         
         if(this.destino != null) {
             if(tamanhoOrigem > this.tamanhoDestino)
-                return false;
+                throw new IllegalArgumentException("Tamanho da origem maior do que o destino");
         }
         
         /*this.origem = new int[origem.length][];
@@ -94,17 +94,17 @@ public class ConexaoBinaria {
      *         ou 'false' caso nao seja.
      */
     public boolean definirDestino(int[] destino) {
-        if(destino == null) return false;
+        if(destino == null) throw new IllegalArgumentException("Destino invalido");
         
         if(this.origem != null) {
             if(destino.length < this.tamanhoOrigem)
-                return false;
+                throw new IllegalArgumentException("Tamanho da origem maior do que o destino");
         }
         
         this.destino = new int[1][];
-        this.destino[0]= destino;
+        this.destino[0] = destino;
         this.tamanhoDestino = destino.length;
-        
+   
         return true;
     }
    
@@ -116,7 +116,7 @@ public class ConexaoBinaria {
      *         ou 'false' caso nao seja
      */
     public boolean definirDestino(int[][] destino) {
-        if(destino == null) return false;
+        if(destino == null) throw new IllegalArgumentException("Destino invalido");
         
         int tamanhoDestino = 0;
         for(int[] d : destino)
@@ -124,7 +124,7 @@ public class ConexaoBinaria {
         
         if(this.origem != null) {
             if(tamanhoDestino < this.tamanhoOrigem)
-                return false;
+                throw new IllegalArgumentException("Tamanho da origem maior do que o destino");
         } 
         
         /*this.destino = new int[destino.length][];
@@ -132,7 +132,7 @@ public class ConexaoBinaria {
             this.destino[i] = destino[i];*/
         
         this.destino = destino;
-        this.tamanhoDestino = destino.length;
+        this.tamanhoDestino = tamanhoDestino;
         
         return true;
     }
@@ -171,7 +171,11 @@ public class ConexaoBinaria {
      *         caso nao seja.
      */
     public boolean conectar() {
-        if(!this.aberta || this.origem == null || this.destino == null) return false;
+            //if(this.aberta)System.out.println("\t" + this + " " + origem[0].length + " -> " + destino[0].length);
+        if(!this.aberta) return false;
+        
+        if(this.origem == null || this.destino == null)
+            throw new IllegalArgumentException("Origem ou Destino invalidos");
         
         int i = this.destino.length - 1;
         int j = this.destino[i].length - 1;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package computador.componentes;
 
 import computador.conexao.Conectavel;
@@ -13,11 +8,21 @@ import computador.conexao.Conectavel;
  */
 public interface MemoriaPrimaria extends Operavel, Conectavel {
     
+    public String getValorBUFFER();
+    
+    public String getEndereco();
+    
     public boolean enderecoValido();
     
-    public void escreverBuffer(int[] binario);    
+    public void escreverPrograma(int inicio, int[][] programa);
+    
     public void escrever();
             
     public void ler();
     
+    public int codigoOperacaoEnderecoValido();
+    
+    public int codigoOperacaoEscrever();
+    
+    public int codigoOperacaoLer();
 }

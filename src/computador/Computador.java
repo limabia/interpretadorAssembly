@@ -1,11 +1,14 @@
 package computador;
 
+import computador.base_numerica.Binario;
 import computador.componentes.Barramento;
 import computador.componentes.CPU;
 import computador.componentes.ComponentException;
 import computador.componentes.MemoriaPrimaria;
 import computador.componentes.RAM;
+import computador.componentes.StatusCPU;
 import computador.componentes.ULA;
+import java.io.File;
 
 /**
  *
@@ -20,7 +23,7 @@ public class Computador {
     
     private CPU CPU;
     
-    public MemoriaPrimaria memoriaPrimaria;
+    private MemoriaPrimaria memoriaPrimaria;
     
     private Barramento barramento;
     
@@ -32,7 +35,7 @@ public class Computador {
         
         this.barramento = new Barramento(this.TAMANHO_PALAVRA);
 
-        this.memoriaPrimaria = new RAM(TAMANHO_PALAVRA, 0, 999);
+        this.memoriaPrimaria = new RAM(this.TAMANHO_PALAVRA, 0, 999);
         
         try {
             this.CPU = new CPU(this.TAMANHO_PALAVRA, this.TAMANHO_OPCODE, 
@@ -43,9 +46,31 @@ public class Computador {
         }
 
     }
+    
+    public StatusCPU getStatusCPU() {
+        return this.CPU.getStatusCPU();
+    }
   
+    public void escreverPrograma(int[][] programa) {
+        this.memoriaPrimaria.escreverPrograma(0, programa);
+    }
+    
     public void executar() {
         this.CPU.clock();
+    }
+    
+    public static void IMPRIMIRTEMPORARIO(StatusCPU statusCPU) {
+        
+        System.out.println("AX:  " + statusCPU.getValorAX()  + "\tBX:  " + statusCPU.getValorBX());
+        System.out.println("CX:  " + statusCPU.getValorCX()  + "\tDX:  " + statusCPU.getValorDX());
+        System.out.println("MAR: " + statusCPU.getValorMAR() + "\tMBR: " + statusCPU.getValorMBR());
+        System.out.println("IR:  " + statusCPU.getValorIR()  + "\tPC:  " + statusCPU.getValorPC());
+        System.out.println("ENDERECO RAM:  " + statusCPU.getEnderecoMemoria()  + "\tBUFFER RAM:  " + statusCPU.getValorBUFFERMemoria());
+        
+        System.out.print("Palavra Controle:");
+        for(String s : statusCPU.getPalavraControle())
+            System.out.print(" " + s);
+        System.out.println();
     }
     
     public static void main(String[] args) {
@@ -60,20 +85,23 @@ public class Computador {
             System.exit(1);
         }
         
-        int[] instrucaoMov = {0,0,0,0,0,  1,0,0,1,1,  0,0,0,0,0,1};
-        computador.memoriaPrimaria.escreverBuffer(new int[16]);
-        computador.memoriaPrimaria.enderecoValido();
-        computador.memoriaPrimaria.escreverBuffer(instrucaoMov); // mudar o buffer e a RAM do computador pra private dps
-        computador.memoriaPrimaria.escrever();
+        int[][] programa = {
+            {0,0,1,0,1,  0,1,1,1,1,  0,0,0,1,0,1}, // MOV [15],5
+            {0,0,0,1,0,  1,0,1,1,1,  0,0,1,1,1,1}  // MOV CX,[15]
+        };
         
-        computador.executar();
-        computador.executar();
-        computador.executar();
-        computador.executar();
-        computador.executar();
-        computador.executar();
-        computador.executar();
-        computador.executar();
+        StatusCPU status = computador.getStatusCPU();
         
+        computador.escreverPrograma(programa);
+        
+        do {
+            try {
+                computador.executar();
+                IMPRIMIRTEMPORARIO(status);        
+            } catch(Exception e) {
+                System.out.println("\nDeu erro! Hora de parar!\n");
+                break;
+            }
+        } while(true);
     }
 }
