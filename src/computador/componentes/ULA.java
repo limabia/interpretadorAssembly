@@ -161,11 +161,11 @@ public class ULA implements Conectavel {
      *         seja.
      */
     public boolean operar(int codigoOperacao) {
-        codigoOperacao = 5;
+        /*codigoOperacao = 5;
         segundoOperando = new Registrador(5);
         operando1 = new Registrador(5);
         operando1.escrever(new int[] {0,0,0,0,1});
-        segundoOperando.escrever(new int[] {0,0,0,1,1});
+        segundoOperando.escrever(new int[] {0,0,0,1,1});*/
         
         switch(codigoOperacao) {
             case 0:
