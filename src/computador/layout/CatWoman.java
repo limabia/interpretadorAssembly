@@ -5,11 +5,18 @@
  */
 package computador.layout;
 
+import computador.Compilador;
+import computador.Computador;
+import static computador.Computador.IMPRIMIRTEMPORARIO;
+import computador.componentes.StatusCPU;
+
 /**
  *
  * @author bianca
  */
 public class CatWoman extends javax.swing.JFrame {
+    
+    Computador computador = null;
 
     /**
      * Creates new form CatWoman
@@ -32,7 +39,7 @@ public class CatWoman extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        campoInstrucoes = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -44,7 +51,7 @@ public class CatWoman extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        iniciarExecucao = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -55,6 +62,8 @@ public class CatWoman extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        proximaPalavra = new javax.swing.JButton();
+        pararExecucao = new javax.swing.JButton();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -67,9 +76,9 @@ public class CatWoman extends javax.swing.JFrame {
 
         jLabel1.setText("CatWoman");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        campoInstrucoes.setColumns(20);
+        campoInstrucoes.setRows(5);
+        jScrollPane1.setViewportView(campoInstrucoes);
 
         jLabel2.setText("Digite as instruções:");
 
@@ -93,10 +102,10 @@ public class CatWoman extends javax.swing.JFrame {
 
         jLabel12.setText("DX :");
 
-        jButton2.setText("Ir para a próxima palavra de controle");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        iniciarExecucao.setText("Iniciar execução");
+        iniciarExecucao.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                iniciarExecucaoActionPerformed(evt);
             }
         });
 
@@ -120,6 +129,20 @@ public class CatWoman extends javax.swing.JFrame {
 
         jLabel22.setText("74");
 
+        proximaPalavra.setText("Ir para a próxima palavra de controle");
+        proximaPalavra.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                proximaPalavraActionPerformed(evt);
+            }
+        });
+
+        pararExecucao.setText("Parar execução");
+        pararExecucao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pararExecucaoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -131,8 +154,8 @@ public class CatWoman extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
@@ -172,12 +195,14 @@ public class CatWoman extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel20)
                                             .addComponent(jLabel18)))))
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 590, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(49, Short.MAX_VALUE))))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(iniciarExecucao, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(proximaPalavra, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pararExecucao, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(239, 239, 239))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +210,7 @@ public class CatWoman extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
@@ -223,18 +248,58 @@ public class CatWoman extends javax.swing.JFrame {
                             .addComponent(jLabel19)
                             .addComponent(jLabel12)
                             .addComponent(jLabel20))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(proximaPalavra)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(iniciarExecucao)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pararExecucao))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void iniciarExecucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_iniciarExecucaoActionPerformed
+       campoInstrucoes.setEnabled(false);
+       String codigo = campoInstrucoes.getText();
+       
+       Compilador compilador = new Compilador();
+       int[][] codigoBin = compilador.compila(codigo);
+        
+        try {
+            computador = new Computador(16);
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Erro ao iniciar o computador: " + e.getMessage());
+            System.exit(1);
+        }
+        
+        computador.escreverPrograma(codigoBin);
+        computador.executar();
+        StatusCPU status = computador.getStatusCPU();
+        IMPRIMIRTEMPORARIO(status);   
+        // habilitar botao de proxima palavra e de parar
+        // desabilitar botao de ini. exec.
+    }//GEN-LAST:event_iniciarExecucaoActionPerformed
+
+    private void proximaPalavraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proximaPalavraActionPerformed
+        try {
+            computador.executar();
+            StatusCPU status = computador.getStatusCPU();
+            IMPRIMIRTEMPORARIO(status);        
+        } catch(Exception e) {
+            System.out.println("\nDeu erro! Hora de parar!\n");
+        }
+    }//GEN-LAST:event_proximaPalavraActionPerformed
+
+    private void pararExecucaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pararExecucaoActionPerformed
+        computador = null;
+        // desabilita botoes
+        // habilita texto de codigo
+        // habilita botao de iniciar exec.
+    }//GEN-LAST:event_pararExecucaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,7 +338,8 @@ public class CatWoman extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTextArea campoInstrucoes;
+    private javax.swing.JButton iniciarExecucao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -299,6 +365,7 @@ public class CatWoman extends javax.swing.JFrame {
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton pararExecucao;
+    private javax.swing.JButton proximaPalavra;
     // End of variables declaration//GEN-END:variables
 }
