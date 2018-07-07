@@ -95,15 +95,32 @@ public class ULA implements Conectavel {
     }
     
     
+     private boolean valorZero(int[] binario) {
+        for(int bit : binario)
+            if(bit == 1)
+                return false;
+        return true;
+    }
+     
+    public static void deslocaDireita(int bin[]) {
+        System.out.println("Deslocou direita");
+        for (int i = bin.length - 1; i > 0; i--) {
+            bin[i] = bin[i - 1];
+        }
+        bin[0] = 0;
+    }
+    
+    
+    
     /**
-     * @param operando
-     * @return o registrador com o valor armazenado em complemento de dois.
+     * @param operando: registrador cujo valor passara para complemento de 2
     */
-    public Registrador obterComplemento(Registrador operando){
+    public int[] obterComplemento(Registrador operando){
         int[] normal = operando.ler();
         int[] complementoDeDois = new int[32];
         // onde tem 0 coloca 1 onde tem 1 coloca 0 
-        for (int i = 0; i < normal.length; i++) {
+        int i;
+        for (i = 0; i < normal.length; i++) {
             if (normal[i] == 1) {
                 complementoDeDois[i] = 0;
             } else if (normal[i] == 0) {
@@ -112,18 +129,41 @@ public class ULA implements Conectavel {
             System.out.println("Complemento: " + complementoDeDois[i]);
         }
         
-        Registrador Um = new Registrador(1);
-        Um.escrever(new int[] {1});
-        operando.escrever(complementoDeDois);
-        operando = soma(operando, Um);
-       
-        return operando;
+        complementoDeDois = soma(complementoDeDois, new int[] {1});
+        return complementoDeDois;
     }
     
     
     
-    public Registrador soma(Registrador operando, Registrador segundoOperando){
-        int[] num1 = operando.ler();
+    public static int[] complementoDeDois(int bin[]) {
+        int complementoDeDois[] = new int[bin.length];
+
+        //copia todos os zeros e o primeiro um
+        int i = bin.length - 1;
+        while (bin[i] == 0 && i > 0) {
+            complementoDeDois[i] = bin[i];
+            i--;
+        }
+
+        complementoDeDois[i] = bin[i];
+        i--;
+
+        // onde tem 0 coloca 1 onde tem 1 coloca 0 
+        while (i >= 0) {
+            if (bin[i] == 1) {
+                complementoDeDois[i] = 0;
+            } else {
+                complementoDeDois[i] = 1;
+            }
+            i--;   
+        }
+        return complementoDeDois;
+    }
+    
+    
+    
+    public boolean soma(){
+        int[] num1 = operando1.ler();
         int[] num2 = segundoOperando.ler();
         int[] resultadoSoma = new int [32];
         int sobe = 0;
@@ -145,7 +185,111 @@ public class ULA implements Conectavel {
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
                 
-        return resultado;
+        return true;
+    }
+    
+    
+    public boolean subtracao(){
+        int[] num1 = operando1.ler();
+        int[] num2 = segundoOperando.ler();
+        int[] resultadoSoma = new int [32];
+        int sobe = 0;
+        int tam;
+        
+        num2 = complementoDeDois(num2);
+        
+        if(num1.length <= num2.length) tam = num1.length;
+        else tam = num2.length;
+        
+        for (int i = tam-1; i >= 0; i--){
+            int bit1 = num1[i];
+            int bit2 = num2[i];
+            int soma = bit1 + bit2 + sobe;
+            resultadoSoma[i] = soma % 2;
+            sobe = soma / 2;
+            System.out.println("Resultado Soma: " + resultadoSoma[i]);
+        }
+        this.resultado.escrever(resultadoSoma);
+               
+        this.flagZero = valorZero(resultado.ler(0));
+        this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
+                
+        return true;
+    }
+    
+    
+    public static int[] soma(int bin1[], int bin2[]) {
+        System.out.println("Entrou na somaBin ");
+        int resultadoSoma[] = new int[32];
+        int numeroDeBits;
+        int sobe = 0;
+        
+        if(bin1.length <= bin2.length) numeroDeBits = bin1.length;
+        else numeroDeBits = bin2.length;
+        
+        for (int i = numeroDeBits - 1; i >= 0; i--) {
+            int bit1 = bin1[i];
+            int bit2 = bin2[i];
+            int soma = bit1 + bit2 + sobe;
+            resultadoSoma[i] = soma % 2;
+            sobe = soma / 2;
+            System.out.println("SomaBin: " + resultadoSoma[i]);
+        }
+        return resultadoSoma;
+    }
+    
+    
+    
+    
+    public static int[] subtrai(int bin1[], int bin2[]) {
+        return soma(bin1, complementoDeDois(bin2));
+    }
+    
+    
+    
+    public boolean multiplicacao(){
+        //utilizando o algoritmo de Booth
+        int a[] = operando1.ler();
+        int m[] = segundoOperando.ler();
+        int q[] = new int[32];
+        int bitAux = 0;
+        int tam;
+        
+        m = complementoDeDois(m);
+        System.out.println("Saiu do complemento");   
+        
+        if(a.length <= m.length) tam = a.length;
+        else tam = m.length;
+                
+        for (int contador = q.length-1; contador > 0; contador--) {
+            System.out.println("Entrou no for");
+            int ultimo = bitAux;
+            int penultimo = q[tam - 1];
+            
+            if (ultimo == 1 && penultimo == 0) {
+                System.out.println("vamos somar: ");
+                a = soma(a, m);
+            } else if (ultimo == 0 && penultimo == 1) {
+                System.out.println("Vamo subtrair: ");
+                a = subtrai(a, m);
+            }
+
+            bitAux = q[tam - 1];
+            deslocaDireita(q);
+            q[0] = a[tam - 1];
+            deslocaDireita(a);
+            a[0] = bitAux;
+            System.out.println("Ultimo: "+ ultimo + " Penultimo: " + penultimo);
+            System.out.println("Q = " + q[tam]);
+        }
+
+        int result[] = new int[a.length + q.length];
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(q, 0, result, a.length, q.length);
+
+        this.resultado.escrever(result);
+        
+        return true;
     }
     /**
      * Dado um codigo de operacao e um operando realiza uma operacao com o
@@ -161,11 +305,9 @@ public class ULA implements Conectavel {
      *         seja.
      */
     public boolean operar(int codigoOperacao) {
-        /*codigoOperacao = 5;
-        segundoOperando = new Registrador(5);
-        operando1 = new Registrador(5);
+        codigoOperacao = 3;
         operando1.escrever(new int[] {0,0,0,0,1});
-        segundoOperando.escrever(new int[] {0,0,0,1,1});*/
+        segundoOperando.escrever(new int[] {0,0,0,1,1});
         
         switch(codigoOperacao) {
             case 0:
@@ -199,30 +341,25 @@ public class ULA implements Conectavel {
                 return true;    
                 
             case 3: // somar
-                soma(operando1, segundoOperando);
-                
-                return true;    
-                
+                soma();
+                return true;                    
                 
             case 4: // somar (comp 2)
-                operando1 = obterComplemento(operando1);
-                segundoOperando = obterComplemento(segundoOperando);
-                soma(operando1, segundoOperando);
+                soma();
                 return true;
                 
             case 5: // subtrair (comp 2)
-                segundoOperando = obterComplemento(segundoOperando);
-                soma(operando1, segundoOperando);
+                subtracao();
                 return true;
                 
             case 6: // multiplicar (comp 2)
-                
+                multiplicacao();
                 return true;
-                
+
             case 7: // dividir (comp 2)
-                
+
                 return true;
-                
+
             default:
             
         }
@@ -230,12 +367,7 @@ public class ULA implements Conectavel {
         return false; 
     }
     
-    private boolean valorZero(int[] binario) {
-        for(int bit : binario)
-            if(bit == 1)
-                return false;
-        return true;
-    }
+   
     
     /**
      * Define o Registrador interno como destino de um objeto ConexaoBinaria.
