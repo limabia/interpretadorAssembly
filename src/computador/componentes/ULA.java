@@ -2,8 +2,7 @@ package computador.componentes;
 
 import computador.conexao.Conectavel;
 import computador.conexao.ConexaoBinaria;
-import computador.base_numerica.Binario.*;
-import static computador.base_numerica.Binario.valorInteiro;
+import static computador.base_numerica.Binario.valorInteiroComplementoDeDois;
 
 /**
  *
@@ -96,23 +95,15 @@ public class ULA implements Conectavel {
         return this.flagOverflow;
     }
     
-    
-     private boolean valorZero(int[] binario) {
+
+    private boolean valorZero(int[] binario) {
         for(int bit : binario)
             if(bit == 1)
                 return false;
         return true;
     }
-     
-    public static void deslocaDireita(int bin[]) {
-        System.out.println("Deslocou direita");
-        for (int i = bin.length - 1; i > 0; i--) {
-            bin[i] = bin[i - 1];
-        }
-        bin[0] = 0;
-    }
     
-    
+    //Recebe um arranjo de int e devolve um arranjo com seu complemento de 2
     public static int[] complementoDeDois(int bin[]) {
         int complementoDeDois[] = new int[bin.length];
 
@@ -122,7 +113,6 @@ public class ULA implements Conectavel {
             complementoDeDois[i] = bin[i];
             i--;
         }
-
         complementoDeDois[i] = bin[i];
         i--;
 
@@ -137,8 +127,7 @@ public class ULA implements Conectavel {
         }
         return complementoDeDois;
     }
-    
-    
+
     
     public boolean soma(){
         int[] num1 = operando1.ler();
@@ -158,7 +147,6 @@ public class ULA implements Conectavel {
             sobe = soma / 2;
         }
         this.resultado.escrever(resultadoSoma, 0);
-               
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
                 
@@ -185,8 +173,7 @@ public class ULA implements Conectavel {
             resultadoSoma[i] = soma % 2;
             sobe = soma / 2;
         }
-        this.resultado.escrever(resultadoSoma, 0);
-               
+        this.resultado.escrever(resultadoSoma, 0);     
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
                 
@@ -195,7 +182,6 @@ public class ULA implements Conectavel {
     
     
     public static int[] soma(int bin1[], int bin2[]) {
-        System.out.println("Entrou na somaBin ");
         int resultadoSoma[] = new int[32];
         int numeroDeBits;
         int sobe = 0;
@@ -233,9 +219,6 @@ public class ULA implements Conectavel {
      *         seja.
      */
     public boolean operar(int codigoOperacao) {
-        codigoOperacao = 6;
-        operando1.escrever(new int[] {0,0,1,1,1});
-        segundoOperando.escrever(new int[] {0,0,0,1,1});
         
         switch(codigoOperacao) {
             case 0:
@@ -262,7 +245,6 @@ public class ULA implements Conectavel {
                 }
                 
                 this.resultado.escrever(aux, 0);
-                
                 this.flagZero = valorZero(resultado.ler(0));
                 this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
                 
@@ -285,37 +267,31 @@ public class ULA implements Conectavel {
                 int[] mult2 = segundoOperando.ler();
                 int[] result = new int[32];
                 
-                int um = valorInteiro(mult1);
-                int outro = valorInteiro(mult2);
+                int um = valorInteiroComplementoDeDois(mult1);
+                int outro = valorInteiroComplementoDeDois(mult2);
                 System.out.println("Prim: " + um + " seg: "+ outro);
                 int resMult = um * outro;
-                
 
                 String strMult = Integer.toBinaryString(resMult);
                 for (int x = 1; x <= strMult.length(); x++){
                     result[result.length - x] = Character.getNumericValue(strMult.charAt(strMult.length() - x));
                 }
- 
-                for (int i = 0; i < result.length; i++) {
-                    System.out.println("arranjo: "+result[i]);
-                }
-                result = complementoDeDois(result); //transforma p/ complemento de 2
+                
+                result = complementoDeDois(result); //transforma novamente p/ complemento de 2
                 this.resultado.escrever(result); //escreve o valor todo numa particao so
                 return true;
 
             case 7: // dividir (comp 2)
                 int[] num1 = operando1.ler();
                 int[] num2 = segundoOperando.ler();
-                
-                int primeiro = valorInteiro(num1);
-                int segundo = valorInteiro(num2);
-                System.out.println("Prim: " + primeiro + " seg: "+segundo);
-                int valorDiv = primeiro / segundo;
-                int restoDiv = primeiro % segundo;
-                System.out.println("valor: "+valorDiv+" resto: "+restoDiv);
                 int[] resto = new int[16];
                 int[] valor = new int [16];
+                int primeiro = valorInteiroComplementoDeDois(num1);
+                int segundo = valorInteiroComplementoDeDois(num2);
+                int valorDiv = primeiro / segundo;
+                int restoDiv = primeiro % segundo;
                 
+                //Faz as transformações para binario novamente
                 String strNum = Integer.toBinaryString(valorDiv);
                 for (int x = 1; x <= strNum.length(); x++)
                     valor[valor.length - x] = Character.getNumericValue(strNum.charAt(strNum.length() - x));
@@ -323,15 +299,14 @@ public class ULA implements Conectavel {
                 String strResto = Integer.toBinaryString(restoDiv);
                 for (int x = 1; x <= strResto.length(); x++)
                     resto[resto.length - x] = Character.getNumericValue(strResto.charAt(strResto.length() - x));
+                //transforma novamente em complemento de 2
+                valor = complementoDeDois(valor);
+                resto = complementoDeDois(resto);
                 
                 this.resultado.escrever(valor,0); //escrever o resultado no P1
                 this.resultado.escrever(resto,1);//escrever o resto no P2
                 return true;
-                
-            default:
-            
         }
-        
         return false; 
     }
     
