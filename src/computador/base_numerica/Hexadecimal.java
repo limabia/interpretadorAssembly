@@ -14,21 +14,19 @@ public class Hexadecimal {
     public static int[] hexaParaBinario (String hexadecimal){
         
         int hexa;
-        hexa = Integer.parseInt(hexadecimal, 16); // Passa o hexadecimal de String para int
-        
+        hexa = Integer.parseInt(hexadecimal, 16); 
         String bin;
-        bin = Integer.toBinaryString(hexa); // Converte o hexa para binario em String
-        
+        bin = Integer.toBinaryString(hexa); 
+
         char [] binarioArray = bin.toCharArray();
+
         int [] binario = new int[bin.length()];
         
         for (int i = 0; i < binario.length; i++){ 
             binario[i] = Integer.parseInt(String.valueOf(binarioArray[i]));
-            System.out.print(binario[i]);
         }
         
         return binario;
         
     }
-  
 }
