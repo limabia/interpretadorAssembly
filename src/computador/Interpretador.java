@@ -6,7 +6,7 @@ import computador.base_numerica.Hexadecimal;
  *
  * @author bianca
  */
-public class Compilador {
+public class Interpretador {
     
     public int[][] compilaBin(String[][] codigoHexa) {
         int n = codigoHexa.length;
@@ -110,110 +110,96 @@ public class Compilador {
                 if(comando[1].contains("[")){
                     if(comando[1].contains("X")){
                     // end de registrador, registrador
-                    return "4";
+                    return "5";
                     }
                     else {
                     // end de memoria, constante
-                    return "5";   
+                    return "6";   
                     }
                 }
                 else {
                     if(comando[2].contains("[")){
                         if(comando[2].contains("X")){
                             // registrador, end de registrador
-                            return "3";
+                            return "4";
                         }
                         else {
                             // registrador, end de memoria 
-                            return "2";
+                            return "3";
                         }
                     }
                     else if(comando[2].contains("X")){
                         // registrador, registrador
-                        return "1";
+                        return "2";
                     }
                     else {
                         //registrador, constante
-                        return "0";
+                        return "1";
                     } 
                 }
                 
             case "ADD":
                 if(comando[2].contains("X")){
                     // registrador, registrador
-                    return "6";
+                    return "7";
                 }
                 else {
                     // registrador, constante
-                    return "7";
+                    return "8";
                 }
                 
             case "SUB":
                 if(comando[2].contains("X")){
                     // registrador, registrador
-                    return "8";
+                    return "9";
                 }
                 else {
                     // registrador, constante
-                    return "9";
+                    return "10";
                 }
                 
             case "MUL":
-                if(comando[2].contains("X")){
-                    // registrador, registrador
-                    return "A";
-                }
-                else {
-                    // registrador, constante
-                    return "B";
-                }
+                return "A";
                 
             case "DIV":
-                if(comando[2].contains("X")){
-                    // registrador, registrador
-                    return "C";
-                }
-                else {
-                    // registrador, constante
-                    return "D";
-                }
+                return "B";
                 
             case "INC":
-                return "E";
+                return "C";
                 
             case "CMP":
                 if(comando[2].contains("X")){
                     // registrador, registrador
-                    return "10";
+                    return "D";
                 }
                 else {
                     // registrador, constante
-                    return "11";
+                    return "E";
                 }
                 
             case "JE":
-                return "12";
+                return "10";
                 
             case "JNE":
-                return "13";
+                return "11";
                 
             case "JG":
-                return "14";
+                return "12";
             
             case "JGE":
-                return "15";
+                return "13";
             
             case "JL":
-                return "16";
+                return "14";
             
             case "JLE":
-                return "17";
+                return "15";
         }
        return null;
     }
     
     public static void main(String[] args) {
-        Compilador compilador = new Compilador();
+        Interpretador compilador = new Interpretador();
         
         String[][] compilado = compilador.compilaHexa("MOV [15],5\nMOV CX,[15]");
         compilador.compilaBin(compilado);
