@@ -154,25 +154,15 @@ public class ULA implements Conectavel {
     }
     
     
-    public boolean subtracao(){
+       public boolean subtracao(){
         int[] num1 = operando1.ler();
         int[] num2 = segundoOperando.ler();
         int[] resultadoSoma = new int [32];
-        int sobe = 0;
-        int tam;
         
         num2 = complementoDeDois(num2);
         
-        if(num1.length <= num2.length) tam = num1.length;
-        else tam = num2.length;
+        resultadoSoma = soma(num1, num2);
         
-        for (int i = tam-1; i >= 0; i--){
-            int bit1 = num1[i];
-            int bit2 = num2[i];
-            int soma = bit1 + bit2 + sobe;
-            resultadoSoma[i] = soma % 2;
-            sobe = soma / 2;
-        }
         this.resultado.escrever(resultadoSoma, 0);     
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
