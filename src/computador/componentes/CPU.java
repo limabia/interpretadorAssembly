@@ -487,8 +487,8 @@ public class CPU {
     /**
      * Executa um ciclo de clock
      */
-    public void clock() {
-        this.UC.executarCiclo();
+    public boolean clock() {
+        return this.UC.executarCiclo();
     }
     
     /**

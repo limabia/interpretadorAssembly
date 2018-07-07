@@ -329,7 +329,12 @@ public class CatWoman extends javax.swing.JFrame {
 
     private void proximaPalavraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proximaPalavraActionPerformed
         try {
-            computador.executar();
+            if(!computador.executar()) {
+                StatusCPU status = computador.getStatusCPU();
+                printaTela(status);
+                JOptionPane.showMessageDialog(null,"Final da execução de boas");
+                return;
+            }
             StatusCPU status = computador.getStatusCPU();
             //IMPRIMIRTEMPORARIO(status);    
             printaTela(status);

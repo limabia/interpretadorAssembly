@@ -55,8 +55,8 @@ public class Computador {
         this.memoriaPrimaria.escreverPrograma(0, programa);
     }
     
-    public void executar() {
-        this.CPU.clock();
+    public boolean executar() {
+        return this.CPU.clock();
     }
     
     public static void IMPRIMIRTEMPORARIO(StatusCPU statusCPU) {
@@ -94,10 +94,16 @@ public class Computador {
             //{0,1,1,0,1,  1,0,0,1,1,  0,0,0,0,0,0},  // INC AX
             //{0,1,0,1,0,  1,0,0,1,1,  0,1,0,1,0,1}, // SUB AX,BX
             
-            {0,0,0,0,1,  1,0,0,1,1,  0,0,0,1,1,1},  // MOV AX,1
-            //{0,1,1,0,1,  1,0,0,1,1,  0,0,0,0,0,0},  // INC AX
-            {0,1,1,1,1,  1,0,0,1,1,  0,0,0,0,1,1},  // COMP AX,1
-            {1,0,1,0,1,  0,0,0,0,0,  0,0,0,0,0,0},  // JL
+            //{0,0,0,0,1,  1,0,0,1,1,  0,0,0,1,1,0},  // MOV AX,1
+            {0,1,1,0,1,  1,0,0,1,1,  0,0,0,0,0,0},  // INC AX
+            {0,1,1,1,1,  1,0,0,1,1,  0,0,0,0,1,1},  // COMP AX,2
+            {1,0,1,0,1,  0,0,0,0,0,  0,0,0,0,0,0},  // JLE
+            
+            //{1,0,0,0,0,  0,0,0,0,0,  0,0,0,0,0,0},  // JE
+            //{1,0,0,0,1,  0,0,0,0,0,  0,0,0,0,0,0},  // JNE
+            //{1,0,0,1,1,  0,0,0,0,0,  0,0,0,0,0,0},  // JGE
+            //{1,0,1,0,0,  0,0,0,0,0,  0,0,0,0,0,0},  // JL
+            //{1,0,1,0,1,  0,0,0,0,0,  0,0,0,0,0,0},  // JLE
         };
         
         StatusCPU status = computador.getStatusCPU();
@@ -106,7 +112,10 @@ public class Computador {
         
         do {
             try {
-                computador.executar();
+                if(!computador.executar()) {
+                    System.out.println("Paoru de boas!");
+                    break;
+                }
                 IMPRIMIRTEMPORARIO(status);        
             } catch(Exception e) {
                 System.out.println("\nDeu erro! Hora de parar!\n" + e.getMessage());

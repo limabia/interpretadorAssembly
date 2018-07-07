@@ -114,7 +114,7 @@ public class UC {
         }
     }
     
-    public void executarCiclo() {
+    public boolean executarCiclo() {
     
         /*for(int i = 0; i < this.conexoes.length; i++) {
             System.out.println(i + "\t" + this.conexoes[i]);
@@ -144,11 +144,11 @@ public class UC {
         // Abre as postas
         for(int i = 0; i < this.conexoes.length; i++)
             if(this.CBR.sinalDeControle(i)) {
-                System.out.print((i+1) + "(" + i +"), ");
+                //System.out.print((i+1) + "(" + i +"), ");
                 this.conexoes[i].abrir();
             }
-        System.out.println(this.CBR.jumpEntradaP1() + " " + this.CBR.jumpSaidaP1() + " " + this.CBR.jumpSaidaP2() + "\n");
-        System.out.println(this.portaEntradaP1 + " " + this.portaSaidaP1 + " " + this.portaSaidaP2 + "\n");
+        //System.out.println(this.CBR.jumpEntradaP1() + " " + this.CBR.jumpSaidaP1() + " " + this.CBR.jumpSaidaP2() + "\n");
+        //System.out.println(this.portaEntradaP1 + " " + this.portaSaidaP1 + " " + this.portaSaidaP2 + "\n");
         
         // Faz o envio de dados
         for(Barramento barramento : this.barramentos)
@@ -174,6 +174,9 @@ public class UC {
         // Define o endereco de JUMP de acordo com o OPCODE
         if(this.CBR.lerIR()) {
             int enderecoInstrucao = Binario.valorInteiro(this.IR.ler(0));
+         
+            if(enderecoInstrucao == 0) return false;
+            
             this.CBR.enderecoJump(this.firmware.enderecoInstrucao(enderecoInstrucao));
             
             this.portaEntradaP1 = portaDecoder(Binario.valorInteiro(this.IR.ler(1)), true);
@@ -196,6 +199,8 @@ public class UC {
             this.CAR = this.CBR.enderecoJump();
         } else
             this.CAR++;
+        
+        return true;
     }
     
     /**
