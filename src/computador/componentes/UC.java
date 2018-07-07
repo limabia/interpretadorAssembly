@@ -1,13 +1,10 @@
 package computador.componentes;
 
-import computador.Teste;
 import computador.base_numerica.Binario;
 import computador.firmware.FirmwareException;
 import computador.firmware.Firmware;
 import computador.conexao.ConexaoBinaria;
 import java.util.ArrayList;
-import java.util.Collection;
-//import java.util.Arrays;
 
 /**
  *

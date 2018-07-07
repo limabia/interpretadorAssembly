@@ -58,7 +58,6 @@ public class Barramento implements Conectavel {
         conexoes = this.saidas.iterator();
         while(conexoes.hasNext()) {
             conexao = conexoes.next();
-            //if(conexao.aberta()) System.out.println("Conexao " + conexao + " abriu");
             conexao.conectar();
             conexao.fechar();
         }

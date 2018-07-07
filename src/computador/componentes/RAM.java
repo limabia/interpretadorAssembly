@@ -77,7 +77,6 @@ public class RAM implements MemoriaPrimaria {
                 
             case 1: // Define o valor do buffer da RAM como um endereco
                 this.enderecoValido();
-                System.out.println("RAM: operar -> endereco valido");
                 return true;
 
             case 2: // Escreve na RAM

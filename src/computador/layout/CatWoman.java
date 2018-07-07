@@ -332,7 +332,7 @@ public class CatWoman extends javax.swing.JFrame {
             if(!computador.executar()) {
                 StatusCPU status = computador.getStatusCPU();
                 printaTela(status);
-                JOptionPane.showMessageDialog(null,"Final da execução de boas");
+                JOptionPane.showMessageDialog(null,"Final da execução");
                 return;
             }
             StatusCPU status = computador.getStatusCPU();

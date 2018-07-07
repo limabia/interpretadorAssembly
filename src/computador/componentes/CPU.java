@@ -1,6 +1,5 @@
 package computador.componentes;
 
-import computador.Teste;
 import computador.conexao.ConexaoBinaria;
 
 /**
@@ -9,7 +8,7 @@ import computador.conexao.ConexaoBinaria;
  */
 public class CPU {
     
-    String MICROPORGRAMA_GAMTEMPORARIA = "#########################################################################\n" +
+    String MICROPROGRAMA = "#########################################################################\n" +
 "# Estrutura da palavra de horizontal\n" +
 "#\n" +
 "# [0][1][2] [3] [4] [5] [6][7][8] [9]\n" +
@@ -249,7 +248,7 @@ public class CPU {
         //String microprograma = (new java.io.File("").getAbsolutePath() + "/src/memoriaControle.txt");
         //System.out.println("---------------------------" + microprograma);
         //this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, microprograma);
-        this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, MICROPORGRAMA_GAMTEMPORARIA);
+        this.UC = new UC(memoriaPrimaria, this.ULA, barramentos, this.IR, 26, MICROPROGRAMA);
         
         /* ############################ CONEXOES ############################ */
         

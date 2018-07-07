@@ -1,7 +1,5 @@
 package computador.conexao;
 
-import computador.Teste;
-
 /**
  * Cada instancia desta classe representa uma conexao entre dois vetores bidimensionais
  * de inteiros que representam um numero binario.

@@ -155,26 +155,26 @@ public class Interpretador {
                 }
                 else {
                     // registrador, constante
-                    return "10";
+                    return "A";
                 }
                 
             case "MUL":
-                return "A";
-                
-            case "DIV":
                 return "B";
                 
-            case "INC":
+            case "DIV":
                 return "C";
+                
+            case "INC":
+                return "D";
                 
             case "CMP":
                 if(comando[2].contains("X")){
                     // registrador, registrador
-                    return "D";
+                    return "E";
                 }
                 else {
                     // registrador, constante
-                    return "E";
+                    return "F";
                 }
                 
             case "JE":
