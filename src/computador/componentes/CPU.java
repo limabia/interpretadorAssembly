@@ -293,9 +293,11 @@ public class CPU {
             conexao = new ConexaoBinaria(true);
             
             // Barramento --(00)--> T
-            this.T.definirComoOrigem(conexao);            
-            this.barramento.definirComoDestino(conexao);
+            this.barramento.definirComoOrigem(conexao);            
+            this.T.definirComoDestino(conexao);
             UC.registrarConexao(conexao, 8);
+            
+            System.out.println("CONEXAO EM QUESTAO: " + conexao);
 
         }
         

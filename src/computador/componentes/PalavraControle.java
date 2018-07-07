@@ -12,7 +12,7 @@ public class PalavraControle {
     private boolean flagSaidaP1;
     private boolean flagSaidaP2;
     
-    private ArrayList<Boolean> sinaisDeControle;
+    private Boolean[] sinaisDeControle;
     
     private int codigoOperacaoULA;
     private int codigoOperacaoRAM;
@@ -35,32 +35,34 @@ public class PalavraControle {
     }
     
     public PalavraControle(int numeroSinaisControle) {
-        this.sinaisDeControle = new ArrayList(numeroSinaisControle);
+        this.sinaisDeControle = new Boolean[numeroSinaisControle];
     }
     
     
     public String[] obterString() {
-        String[] string = new String[12];
+        String[] string = new String[13];
         
-        string[0] = this.valorString(flagEntradaP1);
-        string[1] = this.valorString(flagSaidaP1);
-        string[2] = this.valorString(flagSaidaP2);
+        string[0] = this.valorString(this.flagEntradaP1);
+        string[1] = this.valorString(this.flagSaidaP1);
+        string[2] = this.valorString(this.flagSaidaP2);
         
         string[3] = "";
-        for(boolean statusPorta : sinaisDeControle)
+        for(boolean statusPorta : this.sinaisDeControle)
             string[3] += this.valorString(statusPorta);
                 
-        string[4] = Integer.toString(codigoOperacaoULA);
-        string[5] = Integer.toString(codigoOperacaoRAM);
+        string[4] = Integer.toString(this.codigoOperacaoULA);
+        string[5] = Integer.toString(this.codigoOperacaoRAM);
         
-        string[6] = this.valorString(jumpIncondicional);
-        string[7] = this.valorString(jumpZero);
-        string[8] = this.valorString(jumpNegativo);
-        string[9] = this.valorString(jumpPositivo);
+        string[6] = this.valorString(this.jumpIncondicional);
+        string[7] = this.valorString(this.jumpZero);
+        string[8] = this.valorString(this.jumpNegativo);
+        string[9] = this.valorString(this.jumpPositivo);
         
-        string[10] = this.valorString(lerIR);
+        string[10] = this.valorString(this.lerIR);
         
-        string[11] = Integer.toString(enderecoJump);
+        string[11] = this.valorString(this.lerIRP1);
+        
+        string[12] = Integer.toString(this.enderecoJump);
         
         return string;
     }
@@ -92,7 +94,7 @@ public class PalavraControle {
     }
     
     public void sinalDeControle(int indice, boolean status) {
-        this.sinaisDeControle.add(indice, status);
+        this.sinaisDeControle[indice] = status;
     }
     
     /**
@@ -102,7 +104,7 @@ public class PalavraControle {
      * @return Valor booleano do sinal de controle
      */
     public boolean sinalDeControle(int indice) {        
-        return this.sinaisDeControle.get(indice);
+        return this.sinaisDeControle[indice];
     }
     
     /**

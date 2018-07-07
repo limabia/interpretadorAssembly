@@ -126,29 +126,43 @@ public class UC {
         
         // Verifica as condicoes de jump
         if(this.CBR.jumpEntradaP1())
-            //this.CBR.sinalDeControle(this.portaEntradaP1, true);
-            this.conexoes[this.portaEntradaP1].abrir();
-          
+            this.CBR.sinalDeControle(this.portaEntradaP1, true);
+            //this.conexoes[this.portaEntradaP1].abrir();
+            
         if(this.CBR.jumpSaidaP1())
-            //this.CBR.sinalDeControle(this.portaSaidaP1, true);
-            this.conexoes[this.portaSaidaP1].abrir();
-        
+            this.CBR.sinalDeControle(this.portaSaidaP1, true);
+            //this.conexoes[this.portaSaidaP1].abrir();
+            
         if(this.CBR.jumpSaidaP2())
-            //this.CBR.sinalDeControle(this.portaSaidaP2, true);
-            this.conexoes[this.portaSaidaP2].abrir();
-
+            this.CBR.sinalDeControle(this.portaSaidaP2, true);
+            //this.conexoes[this.portaSaidaP2].abrir();
+            
         // Se for uma operacao de leitura eh necessario executar antes
         if(this.CBR.operacaoRAM() == this.memoriaPrimaria.codigoOperacaoLer())
             this.memoriaPrimaria.operar(this.CBR.operacaoRAM());
         
         // Abre as postas
         for(int i = 0; i < this.conexoes.length; i++)
-            if(this.CBR.sinalDeControle(i))
+            if(this.CBR.sinalDeControle(i)) {
+                System.out.print((i+1) + "(" + i +"), ");
                 this.conexoes[i].abrir();
+            }
+        System.out.println(this.CBR.jumpEntradaP1() + " " + this.CBR.jumpSaidaP1() + " " + this.CBR.jumpSaidaP2() + "\n");
+        System.out.println(this.portaEntradaP1 + " " + this.portaSaidaP1 + " " + this.portaSaidaP2 + "\n");
         
         // Faz o envio de dados
         for(Barramento barramento : this.barramentos)
             barramento.conectar();
+        
+        // Verifica as condicoes de jump
+        if(this.CBR.jumpEntradaP1())
+            this.CBR.sinalDeControle(this.portaEntradaP1, false);
+
+        if(this.CBR.jumpSaidaP1())
+            this.CBR.sinalDeControle(this.portaSaidaP1, false);
+            
+        if(this.CBR.jumpSaidaP2())
+            this.CBR.sinalDeControle(this.portaSaidaP2, false);
         
         // Interpreta os sinais da ULA e da RAM
         this.ULA.operar(this.CBR.operacaoULA());
@@ -178,10 +192,11 @@ public class UC {
             this.CAR = this.CBR.enderecoJump();
         else if(this.CBR.jumpNegativo() && !this.ULA.sinalPositivo())
              this.CAR = this.CBR.enderecoJump();   
-        else if(this.CBR.jumpPositivo() && !this.ULA.sinalPositivo() && !this.ULA.flagZero())
+        else if(this.CBR.jumpPositivo() && this.ULA.sinalPositivo() && !this.ULA.flagZero())
             this.CAR = this.CBR.enderecoJump();
         else
             this.CAR++;
+        
         
     }
     

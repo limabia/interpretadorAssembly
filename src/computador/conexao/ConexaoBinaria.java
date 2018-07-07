@@ -171,8 +171,15 @@ public class ConexaoBinaria {
      *         caso nao seja.
      */
     public boolean conectar() {
-            //if(this.aberta)System.out.println("\t" + this + " " + origem[0].length + " -> " + destino[0].length);
+    
         if(!this.aberta) return false;
+    
+        /*if(this.aberta) {
+            //System.out.println("\t" + this + " " + origem[0].length + " -> " + destino[0].length);
+            //System.out.print("\tORIGEM-DESTINO: ");
+            //int u, p;
+        }*/
+            
         
         if(this.origem == null || this.destino == null)
             throw new IllegalArgumentException("Origem ou Destino invalidos");

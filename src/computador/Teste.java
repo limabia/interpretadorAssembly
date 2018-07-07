@@ -1,5 +1,6 @@
 package computador;
 
+import static computador.base_numerica.Binario.binarioInteiroParaDecimal;
 import computador.componentes.Barramento;
 import computador.componentes.PalavraControle;
 import computador.firmware.Firmware;
@@ -21,6 +22,8 @@ public class Teste {
     
     public static void main(String[] args) {
     
+        System.out.println(binarioInteiroParaDecimal(new int[] {0,1,0,0,0}));
+        
         Barramento barramento = new Barramento(8);
         
         Registrador A = new Registrador(8);
@@ -313,12 +316,14 @@ public class Teste {
             System.out.println(fe.getMessage());
         }
         
-        firmware.ler(0).imprimir();
+        
+        
+        /*firmware.ler(0).imprimir();
         firmware.ler(1).imprimir();
         firmware.ler(2).imprimir();
         firmware.ler(3).imprimir();
         
-        firmware.ler(firmware.enderecoInstrucao(1)).imprimir();
+        firmware.ler(firmware.enderecoInstrucao(1)).imprimir();*/
     }
     
 }

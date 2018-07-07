@@ -1,5 +1,7 @@
 package computador.componentes;
 
+import static computador.base_numerica.Binario.decimalInteiroParaInteiroBinario;
+import static computador.base_numerica.Binario.valorInteiro;
 import computador.conexao.Conectavel;
 import computador.conexao.ConexaoBinaria;
 import static computador.base_numerica.Binario.valorInteiroComplementoDeDois;
@@ -103,95 +105,110 @@ public class ULA implements Conectavel {
         return true;
     }
     
-    //Recebe um arranjo de int e devolve um arranjo com seu complemento de 2
-    public static int[] complementoDeDois(int bin[]) {
-        int complementoDeDois[] = new int[bin.length];
-
-        //copia todos os zeros e o primeiro um
-        int i = bin.length - 1;
-        while (bin[i] == 0 && i > 0) {
-            complementoDeDois[i] = bin[i];
-            i--;
+    public void somarUm(int[] binario) {
+        int valorAnterior;
+        int excesso = 1;
+        for(int i = binario.length - 1; i >= 0 && excesso == 1; i--) {
+            valorAnterior = binario[i];
+            binario[i] = (binario[i] + excesso) % 2;
+            excesso = (valorAnterior + excesso) / 2;
         }
-        complementoDeDois[i] = bin[i];
-        i--;
-
-        // onde tem 0 coloca 1 onde tem 1 coloca 0 
-        while (i >= 0) {
-            if (bin[i] == 1) {
-                complementoDeDois[i] = 0;
-            } else {
-                complementoDeDois[i] = 1;
-            }
-            i--;   
+    }
+    
+    public void complementoDeDois(int[] binario) {
+        for (int i = 0; i < binario.length; i++) {
+            binario[i] = (binario[i] + 1) % 2; // Inverte os sinais
         }
-        return complementoDeDois;
+            
+        this.somarUm(binario);
     }
 
     
-    public boolean soma(){
-        int[] num1 = operando1.ler();
-        int[] num2 = segundoOperando.ler();
-        int[] resultadoSoma = new int [16];
-        int sobe = 0;
-        int tam;
-        
-        if(num1.length <= num2.length) tam = num1.length;
-        else tam = num2.length;
-        
-        for (int i = tam-1; i >= 0; i--){
-            int bit1 = num1[i];
-            int bit2 = num2[i];
-            int soma = bit1 + bit2 + sobe;
-            resultadoSoma[i] = soma % 2;
-            sobe = soma / 2;
+    public void somar(int[] a, int[] b) {
+        int[] c = new int[(a.length > b.length ? a.length : b.length)];
+
+        // Excesso de uma soma (no caso de 1 + 1 excesso = 1)
+        int excesso = 0;
+
+        // Soma os bits
+        for (int i = c.length - 1; i >= 0; i--) {
+            c[i] = (a[i] + b[i] + excesso) % 2;
+            excesso = (a[i] + b[i] + excesso) / 2;
         }
-        this.resultado.escrever(resultadoSoma, 1);
-        this.flagZero = valorZero(resultado.ler(0));
-        this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
-                
-        return true;
+        
+        // Se o numero 'a' e o numero 'b' possuem o mesmo sinal, entao houve um 'overflow' se, e somente se, 
+        // o sinal do numero resultante da soma for diferente
+        this.flagOverflow = (a[0] == b[0] && a[0] != c[0]);  
+        this.resultado.escrever(c, 1);
+        this.flagZero = valorZero(c);
+        this.flagSinalPositivo = (!this.flagZero && c[0] == 0);
     }
     
- public boolean subtracao(){
-        int[] num1 = operando1.ler();
-        int[] num2 = segundoOperando.ler();
-        int[] resultadoSoma;
+    public void subtrair(int[] a, int[] b) {
+        this.complementoDeDois(b);
+        somar(a, b);
         
-        num2 = complementoDeDois(num2);
-        
-        resultadoSoma = soma(num1, num2);
-        
-        this.resultado.escrever(resultadoSoma, 1);     
-        this.flagZero = valorZero(resultado.ler(0));
-        this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
-                
-        return true;
+        System.out.println("FALGS: Z S " + this.flagZero + " " + this.flagSinalPositivo + "--------------------------------------------------------------");
     }
     
-    
-    
-    public static int[] soma(int bin1[], int bin2[]) {
-        int resultadoSoma[] = new int[16];
-        int numeroDeBits;
-        int sobe = 0;
+    public void multiplicar(int[] a, int[] b) {
         
-        if(bin1.length <= bin2.length) numeroDeBits = bin1.length;
-        else numeroDeBits = bin2.length;
+        int sinal1 = 1;
+        int sinal2 = 1;
         
-        for (int i = numeroDeBits - 1; i >= 0; i--) {
-            int bit1 = bin1[i];
-            int bit2 = bin2[i];
-            int soma = bit1 + bit2 + sobe;
-            resultadoSoma[i] = soma % 2;
-            sobe = soma / 2;
+        // Salva o sinal de A e tira o complemento de dois caso seja negativo
+        if(a[0] == 1) {
+            sinal1 = -1;
+            this.complementoDeDois(a);
         }
-        return resultadoSoma;
+        
+        // Salva o sinal de B e tira o complemento de dois caso seja negativo
+        if(b[0] == 1) {
+            sinal2 = -1;
+            this.complementoDeDois(b);
+        }
+        
+        int valor1 = valorInteiro(a);
+        int valor2 = valorInteiro(b);
+        
+        int[] resultado = decimalInteiroParaInteiroBinario(valor1 * valor2, 32);
+        
+        if(sinal1 * sinal2 < 0) {
+            this.complementoDeDois(resultado);
+        }
+            
+        this.resultado.escrever(resultado);
     }
     
-    
-    public static int[] subtrai(int bin1[], int bin2[]) {
-        return soma(bin1, complementoDeDois(bin2));
+    public void dividir(int[] a, int[] b) {
+        
+        int sinal1 = 1;
+        int sinal2 = 1;
+        
+        // Salva o sinal de A e tira o complemento de dois caso seja negativo
+        if(a[0] == 1) {
+            sinal1 = -1;
+            this.complementoDeDois(a);
+        }
+        
+        // Salva o sinal de B e tira o complemento de dois caso seja negativo
+        if(b[0] == 1) {
+            sinal2 = -1;
+            this.complementoDeDois(b);
+        }
+        
+        int valor1 = valorInteiro(a);
+        int valor2 = valorInteiro(b);
+        
+        int[] resultado = decimalInteiroParaInteiroBinario(valor1 / valor2, 16);
+        int[] resto = decimalInteiroParaInteiroBinario(valor1 % valor2, 16);
+        
+        if(sinal1 * sinal2 < 0) {
+            this.complementoDeDois(resultado);
+        }
+            
+        this.resultado.escrever(resto, 0); 
+        this.resultado.escrever(resultado, 1);
     }
     
 
@@ -226,49 +243,28 @@ public class ULA implements Conectavel {
                 
                 int[] aux = operando1.ler();
                 
-                int valorAnterior;
-                int excesso = 1;
-                for(int i = aux.length - 1; i >= 0 && excesso == 1; i--) {
-                    valorAnterior = aux[i];
-                    aux[i] = (aux[i] + excesso) % 2;
-                    excesso = (valorAnterior + excesso) / 2;
-                }
+                this.somarUm(aux);
                 
-                this.resultado.escrever(aux, 0);
-                this.flagZero = valorZero(resultado.ler(0));
-                this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
+                this.resultado.escrever(aux, 1);
+                this.flagZero = valorZero(aux);
+                this.flagSinalPositivo = (!this.flagZero && aux[0] == 0);
                 
                 return true;    
                 
             case 3: // somar
-                soma();
+                //soma();
                 return true;                    
                 
             case 4: // somar (comp 2)
-                soma();
+                this.somar(operando1.ler(), segundoOperando.ler());
                 return true;
                 
             case 5: // subtrair (comp 2)
-                subtracao();
+                this.subtrair(operando1.ler(), segundoOperando.ler());
                 return true;
                 
             case 6: // multiplicar (comp 2)
-                int[] mult1 = operando1.ler();
-                int[] mult2 = segundoOperando.ler();
-                int[] result = new int[32];
-                
-                int um = valorInteiroComplementoDeDois(mult1);
-                int outro = valorInteiroComplementoDeDois(mult2);
-                System.out.println("Prim: " + um + " seg: "+ outro);
-                int resMult = um * outro;
-
-                String strMult = Integer.toBinaryString(resMult);
-                for (int x = 1; x <= strMult.length(); x++){
-                    result[result.length - x] = Character.getNumericValue(strMult.charAt(strMult.length() - x));
-                }
-                
-                result = complementoDeDois(result); //transforma novamente p/ complemento de 2
-                this.resultado.escrever(result); //escreve o valor todo numa particao so
+                multiplicar(operando1.ler(), segundoOperando.ler());
                 return true;
 
             case 7: // dividir (comp 2)
@@ -290,11 +286,11 @@ public class ULA implements Conectavel {
                 for (int x = 1; x <= strResto.length(); x++)
                     resto[resto.length - x] = Character.getNumericValue(strResto.charAt(strResto.length() - x));
                 //transforma novamente em complemento de 2
-                valor = complementoDeDois(valor);
-                resto = complementoDeDois(resto);
+                //valor = complementoDeDois(valor);
+                //resto = complementoDeDois(resto);
                 
-                this.resultado.escrever(valor,0); //escrever o resultado no P1
-                this.resultado.escrever(resto,1);//escrever o resto no P2
+                this.resultado.escrever(valor,1); //escrever o resultado no P2
+                this.resultado.escrever(resto,0);//escrever o resto no P1
                 return true;
         }
         return false; 

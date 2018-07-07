@@ -66,6 +66,7 @@ public class Computador {
         System.out.println("MAR: " + statusCPU.getValorMAR() + "\tMBR: " + statusCPU.getValorMBR());
         System.out.println("IR:  " + statusCPU.getValorIR()  + "\tPC:  " + statusCPU.getValorPC());
         System.out.println("ENDERECO RAM:  " + statusCPU.getEnderecoMemoria()  + "\tBUFFER RAM:  " + statusCPU.getValorBUFFERMemoria());
+        System.out.println("AC:  " + statusCPU.getValorAC()  + "\tT:  " + statusCPU.getValorT());
         
         System.out.print("Palavra Controle:");
         for(String s : statusCPU.getPalavraControle())
@@ -86,9 +87,16 @@ public class Computador {
         }
         
         int[][] programa = {
-            {0,0,0,0,1,  1,0,0,1,1,  0,0,0,0,1,1},  // MOV AX,1
-            {0,0,0,0,1,  1,0,1,0,1,  0,0,0,0,0,1},  // MOV BX,1
-            {0,0,1,1,1,  1,0,0,1,1,  0,1,0,1,0,1},  // SUB AX,BX
+            //{0,0,0,0,1,  1,0,0,1,1,  0,0,0,0,1,0},  // MOV AX,2
+            //{0,1,0,1,0,  1,0,0,1,1,  0,0,0,1,0,0},  // SUB AX,4
+            //{0,0,0,0,1,  1,0,1,0,1,  0,0,0,0,1,0},  // MOV BX,2
+            //{0,1,1,0,0,  1,0,1,0,1,  0,1,0,1,0,1},  // SUB AX,BX
+            //{0,1,1,0,1,  1,0,0,1,1,  0,0,0,0,0,0},  // INC AX
+            //{0,1,0,1,0,  1,0,0,1,1,  0,1,0,1,0,1}, // SUB AX,BX
+            
+            {0,1,1,0,1,  1,0,0,1,1,  0,0,0,0,0,0},  // INC AX
+            {0,1,1,1,1,  1,0,0,1,1,  0,0,0,0,0,1},  // COMP AX,3
+            {1,0,0,0,0,  0,0,0,0,0,  0,0,0,0,0,0},  // JLE 0
         };
         
         StatusCPU status = computador.getStatusCPU();
