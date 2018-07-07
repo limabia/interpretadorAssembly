@@ -24,7 +24,6 @@ public class PalavraControle {
     //private boolean jumpOverflow;
     
     private boolean lerIR;
-    private boolean lerIRP1;
     private int enderecoJump;
     
     public String valorString(boolean status) {
@@ -40,7 +39,7 @@ public class PalavraControle {
     
     
     public String[] obterString() {
-        String[] string = new String[13];
+        String[] string = new String[12];
         
         string[0] = this.valorString(this.flagEntradaP1);
         string[1] = this.valorString(this.flagSaidaP1);
@@ -60,9 +59,9 @@ public class PalavraControle {
         
         string[10] = this.valorString(this.lerIR);
         
-        string[11] = this.valorString(this.lerIRP1);
+        //string[11] = this.valorString(this.lerIRP1);
         
-        string[12] = Integer.toString(this.enderecoJump);
+        string[11] = Integer.toString(this.enderecoJump);
         
         return string;
     }
@@ -238,25 +237,6 @@ public class PalavraControle {
      */
     public boolean lerIR() {
         return this.lerIR;
-    }
-
-    /**
-     * Setter para a flag de leitura do proximo endereco
-     * 
-     * @param status Valor boolean da flag
-     */
-    public void lerIRP1(boolean status) {
-        this.lerIRP1 = status;
-    }
-    
-    /**
-     * Getter para a flag de leitura do proximo endereco
-     * 
-     * @return 'true' caso seja necessario ler do IRP1 o proximo endereco,
-     *         'false' caso nao seja.
-     */
-    public boolean lerIRP1() {
-        return this.lerIRP1;
     }
     
     /**

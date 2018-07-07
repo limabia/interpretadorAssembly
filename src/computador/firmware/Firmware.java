@@ -99,7 +99,6 @@ public class Firmware {
             palavraControle.jumpPositivo(this.valorBooleano(auxiliar.nextInt()));
             
             palavraControle.lerIR(this.valorBooleano(auxiliar.nextInt()));
-            palavraControle.lerIRP1(this.valorBooleano(auxiliar.nextInt()));
             
             palavraControle.enderecoJump(auxiliar.nextInt());
             

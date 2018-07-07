@@ -180,10 +180,6 @@ public class UC {
             this.portaSaidaP1 = portaDecoder(Binario.valorInteiro(this.IR.ler(1)), false);
             this.portaSaidaP2 = portaDecoder(Binario.valorInteiro(this.IR.ler(2)), false);
         }
-        
-        // Define o endereco de JUMP igual ao parametro 1 no IR
-        if(this.CBR.lerIRP1())
-            this.CBR.enderecoJump(Binario.valorInteiro(this.IR.ler(1)));
             
         // ARRUMAR ESSES JUMPS PARA CHECAREM A ULA
         if(this.CBR.jumpIncondicional())
