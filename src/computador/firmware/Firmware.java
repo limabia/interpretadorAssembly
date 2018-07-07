@@ -56,8 +56,8 @@ public class Firmware {
      * @throws FileNotFoundException Arquivo nao encontrado
      */
     private void carregar(String nomeArquivoFirmware) throws FileNotFoundException{
-        Scanner arquivoFirmware = new Scanner(new File(nomeArquivoFirmware));
-        //Scanner arquivoFirmware = new Scanner(nomeArquivoFirmware);
+        //Scanner arquivoFirmware = new Scanner(new File(nomeArquivoFirmware));
+        Scanner arquivoFirmware = new Scanner(nomeArquivoFirmware);
         Scanner auxiliar;
         String palavraControleString = "0";
         int indiceLinha = 0;

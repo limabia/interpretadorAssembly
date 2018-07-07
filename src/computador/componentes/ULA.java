@@ -21,6 +21,7 @@ public class ULA implements Conectavel {
     
     /* Flags */
     private boolean flagZero; // Resultado da operacao deu igual a zero
+    private boolean flagSinalNegativo;
     private boolean flagSinalPositivo; // Se resultado eh positivo ou nao
     private boolean flagOverflow; // Operacao resultou em overflow
 
@@ -77,6 +78,10 @@ public class ULA implements Conectavel {
         return this.flagZero;
     }
     
+    public boolean sinalNegativo() {
+        return this.flagSinalNegativo;
+    }
+    
     /**
      * Retorna o valor da flag de sinal positivo.
      * 
@@ -99,9 +104,10 @@ public class ULA implements Conectavel {
     
 
     private boolean valorZero(int[] binario) {
-        for(int bit : binario)
-            if(bit == 1)
+        for(int i = 1; i < binario.length; i++) {
+            if(binario[i] == 1)
                 return false;
+        }
         return true;
     }
     
@@ -142,13 +148,14 @@ public class ULA implements Conectavel {
         this.resultado.escrever(c, 1);
         this.flagZero = valorZero(c);
         this.flagSinalPositivo = (!this.flagZero && c[0] == 0);
+        this.flagSinalNegativo = (!this.flagZero && c[0] == 1);
     }
     
     public void subtrair(int[] a, int[] b) {
         this.complementoDeDois(b);
         somar(a, b);
         
-        System.out.println("FALGS: Z S " + this.flagZero + " " + this.flagSinalPositivo + "--------------------------------------------------------------");
+        System.out.println("FALGS: Z S " + this.flagZero + " +" + this.flagSinalPositivo + " -" + this.flagSinalNegativo + "--------------------------------------------------------------");
     }
     
     public void multiplicar(int[] a, int[] b) {
@@ -246,8 +253,8 @@ public class ULA implements Conectavel {
                 this.somarUm(aux);
                 
                 this.resultado.escrever(aux, 1);
-                this.flagZero = valorZero(aux);
-                this.flagSinalPositivo = (!this.flagZero && aux[0] == 0);
+                //this.flagZero = valorZero(aux);
+                //this.flagSinalPositivo = (!this.flagZero && aux[0] == 0);
                 
                 return true;    
                 

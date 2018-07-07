@@ -188,16 +188,14 @@ public class UC {
         // ARRUMAR ESSES JUMPS PARA CHECAREM A ULA
         if(this.CBR.jumpIncondicional())
             this.CAR = this.CBR.enderecoJump();
-        else if(this.CBR.jumpZero() && this.ULA.flagZero())
+        else if(this.CBR.jumpZero() && this.ULA.flagZero()) {
             this.CAR = this.CBR.enderecoJump();
-        else if(this.CBR.jumpNegativo() && !this.ULA.sinalPositivo())
+        } else if(this.CBR.jumpNegativo() && this.ULA.sinalNegativo()) {
              this.CAR = this.CBR.enderecoJump();   
-        else if(this.CBR.jumpPositivo() && this.ULA.sinalPositivo() && !this.ULA.flagZero())
+        } else if(this.CBR.jumpPositivo() && this.ULA.sinalPositivo()) {
             this.CAR = this.CBR.enderecoJump();
-        else
+        } else
             this.CAR++;
-        
-        
     }
     
     /**
