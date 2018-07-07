@@ -132,7 +132,7 @@ public class ULA implements Conectavel {
     public boolean soma(){
         int[] num1 = operando1.ler();
         int[] num2 = segundoOperando.ler();
-        int[] resultadoSoma = new int [32];
+        int[] resultadoSoma = new int [16];
         int sobe = 0;
         int tam;
         
@@ -146,24 +146,23 @@ public class ULA implements Conectavel {
             resultadoSoma[i] = soma % 2;
             sobe = soma / 2;
         }
-        this.resultado.escrever(resultadoSoma, 0);
+        this.resultado.escrever(resultadoSoma, 1);
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
                 
         return true;
     }
     
-    
-       public boolean subtracao(){
+ public boolean subtracao(){
         int[] num1 = operando1.ler();
         int[] num2 = segundoOperando.ler();
-        int[] resultadoSoma = new int [32];
+        int[] resultadoSoma;
         
         num2 = complementoDeDois(num2);
         
         resultadoSoma = soma(num1, num2);
         
-        this.resultado.escrever(resultadoSoma, 0);     
+        this.resultado.escrever(resultadoSoma, 1);     
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
                 
@@ -171,8 +170,9 @@ public class ULA implements Conectavel {
     }
     
     
+    
     public static int[] soma(int bin1[], int bin2[]) {
-        int resultadoSoma[] = new int[32];
+        int resultadoSoma[] = new int[16];
         int numeroDeBits;
         int sobe = 0;
         
