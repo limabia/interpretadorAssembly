@@ -2,6 +2,8 @@ package computador.componentes;
 
 import computador.conexao.Conectavel;
 import computador.conexao.ConexaoBinaria;
+import computador.base_numerica.Binario.*;
+import static computador.base_numerica.Binario.valorInteiro;
 
 /**
  *
@@ -111,30 +113,6 @@ public class ULA implements Conectavel {
     }
     
     
-    
-    /**
-     * @param operando: registrador cujo valor passara para complemento de 2
-    */
-    public int[] obterComplemento(Registrador operando){
-        int[] normal = operando.ler();
-        int[] complementoDeDois = new int[32];
-        // onde tem 0 coloca 1 onde tem 1 coloca 0 
-        int i;
-        for (i = 0; i < normal.length; i++) {
-            if (normal[i] == 1) {
-                complementoDeDois[i] = 0;
-            } else if (normal[i] == 0) {
-                complementoDeDois[i] = 1;
-            }
-            System.out.println("Complemento: " + complementoDeDois[i]);
-        }
-        
-        complementoDeDois = soma(complementoDeDois, new int[] {1});
-        return complementoDeDois;
-    }
-    
-    
-    
     public static int[] complementoDeDois(int bin[]) {
         int complementoDeDois[] = new int[bin.length];
 
@@ -178,9 +156,8 @@ public class ULA implements Conectavel {
             int soma = bit1 + bit2 + sobe;
             resultadoSoma[i] = soma % 2;
             sobe = soma / 2;
-            System.out.println("Resultado Soma: " + resultadoSoma[i]);
         }
-        this.resultado.escrever(resultadoSoma);
+        this.resultado.escrever(resultadoSoma, 0);
                
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
@@ -207,9 +184,8 @@ public class ULA implements Conectavel {
             int soma = bit1 + bit2 + sobe;
             resultadoSoma[i] = soma % 2;
             sobe = soma / 2;
-            System.out.println("Resultado Soma: " + resultadoSoma[i]);
         }
-        this.resultado.escrever(resultadoSoma);
+        this.resultado.escrever(resultadoSoma, 0);
                
         this.flagZero = valorZero(resultado.ler(0));
         this.flagSinalPositivo = (!this.flagZero && resultado.lerBit(0) == 0);
@@ -233,64 +209,16 @@ public class ULA implements Conectavel {
             int soma = bit1 + bit2 + sobe;
             resultadoSoma[i] = soma % 2;
             sobe = soma / 2;
-            System.out.println("SomaBin: " + resultadoSoma[i]);
         }
         return resultadoSoma;
     }
-    
-    
     
     
     public static int[] subtrai(int bin1[], int bin2[]) {
         return soma(bin1, complementoDeDois(bin2));
     }
     
-    
-    
-    public boolean multiplicacao(){
-        //utilizando o algoritmo de Booth
-        int a[] = operando1.ler();
-        int m[] = segundoOperando.ler();
-        int q[] = new int[32];
-        int bitAux = 0;
-        int tam;
-        
-        m = complementoDeDois(m);
-        System.out.println("Saiu do complemento");   
-        
-        if(a.length <= m.length) tam = a.length;
-        else tam = m.length;
-                
-        for (int contador = q.length-1; contador > 0; contador--) {
-            System.out.println("Entrou no for");
-            int ultimo = bitAux;
-            int penultimo = q[tam - 1];
-            
-            if (ultimo == 1 && penultimo == 0) {
-                System.out.println("vamos somar: ");
-                a = soma(a, m);
-            } else if (ultimo == 0 && penultimo == 1) {
-                System.out.println("Vamo subtrair: ");
-                a = subtrai(a, m);
-            }
 
-            bitAux = q[tam - 1];
-            deslocaDireita(q);
-            q[0] = a[tam - 1];
-            deslocaDireita(a);
-            a[0] = bitAux;
-            System.out.println("Ultimo: "+ ultimo + " Penultimo: " + penultimo);
-            System.out.println("Q = " + q[tam]);
-        }
-
-        int result[] = new int[a.length + q.length];
-        System.arraycopy(a, 0, result, 0, a.length);
-        System.arraycopy(q, 0, result, a.length, q.length);
-
-        this.resultado.escrever(result);
-        
-        return true;
-    }
     /**
      * Dado um codigo de operacao e um operando realiza uma operacao com o
      * primeiroOPerando e com o valor armazenado no Registrador segundoParametro
@@ -305,8 +233,8 @@ public class ULA implements Conectavel {
      *         seja.
      */
     public boolean operar(int codigoOperacao) {
-        codigoOperacao = 3;
-        operando1.escrever(new int[] {0,0,0,0,1});
+        codigoOperacao = 6;
+        operando1.escrever(new int[] {0,0,1,1,1});
         segundoOperando.escrever(new int[] {0,0,0,1,1});
         
         switch(codigoOperacao) {
@@ -353,13 +281,53 @@ public class ULA implements Conectavel {
                 return true;
                 
             case 6: // multiplicar (comp 2)
-                multiplicacao();
+                int[] mult1 = operando1.ler();
+                int[] mult2 = segundoOperando.ler();
+                int[] result = new int[32];
+                
+                int um = valorInteiro(mult1);
+                int outro = valorInteiro(mult2);
+                System.out.println("Prim: " + um + " seg: "+ outro);
+                int resMult = um * outro;
+                
+
+                String strMult = Integer.toBinaryString(resMult);
+                for (int x = 1; x <= strMult.length(); x++){
+                    result[result.length - x] = Character.getNumericValue(strMult.charAt(strMult.length() - x));
+                }
+ 
+                for (int i = 0; i < result.length; i++) {
+                    System.out.println("arranjo: "+result[i]);
+                }
+                result = complementoDeDois(result); //transforma p/ complemento de 2
+                this.resultado.escrever(result); //escreve o valor todo numa particao so
                 return true;
 
             case 7: // dividir (comp 2)
-
+                int[] num1 = operando1.ler();
+                int[] num2 = segundoOperando.ler();
+                
+                int primeiro = valorInteiro(num1);
+                int segundo = valorInteiro(num2);
+                System.out.println("Prim: " + primeiro + " seg: "+segundo);
+                int valorDiv = primeiro / segundo;
+                int restoDiv = primeiro % segundo;
+                System.out.println("valor: "+valorDiv+" resto: "+restoDiv);
+                int[] resto = new int[16];
+                int[] valor = new int [16];
+                
+                String strNum = Integer.toBinaryString(valorDiv);
+                for (int x = 1; x <= strNum.length(); x++)
+                    valor[valor.length - x] = Character.getNumericValue(strNum.charAt(strNum.length() - x));
+                    
+                String strResto = Integer.toBinaryString(restoDiv);
+                for (int x = 1; x <= strResto.length(); x++)
+                    resto[resto.length - x] = Character.getNumericValue(strResto.charAt(strResto.length() - x));
+                
+                this.resultado.escrever(valor,0); //escrever o resultado no P1
+                this.resultado.escrever(resto,1);//escrever o resto no P2
                 return true;
-
+                
             default:
             
         }
