@@ -17,28 +17,7 @@ public class Firmware {
     private static final char DEMARCADOR_COMENTARIO = '#';
     private static final char DEMARCADOR_CODIGO_OPERACAO = '$';
     
-    public static final int TAMANHO_PALAVRA_CONTROLE = 40;
-    
-    /******************************** INDICES ********************************/
-    
-    public static final int INDICE_FLAG_ENTRADA_P1 = 0;
-    public static final int INDICE_FLAG_SAIDA_P1 = 1;
-    public static final int INDICE_FLAG_SAIDA_P2 = 2;
-    
-    public static final int INDICE_SINAIS_CONTROLE = 3;
-    public static final int NUMERO_SINAIS_CONTROLE = 30;
-    
-    public static final int INDICE_SINAIS_ULA = 33;
-    
-    public static final int INDICE_SINAIS_MEMORIA = 34;
-    
-    public static final int INDICE_JUMP_INCONDICIONAL = 35;
-    public static final int INDICE_JUMP_ZERO = 36;
-    public static final int INDICE_JUMP_OVERFLOW = 37;
-    
-    public static final int INDICE_FLAG_LER_IR = 38;
-    public static final int INDICE_ENDERECO_JUMP = 39;
-    
+    public static final int NUMERO_SINAIS_CONTROLE = 26;
     
     private int numeroPalavras;
     private ArrayList<PalavraControle> firmware;
@@ -120,6 +99,7 @@ public class Firmware {
             palavraControle.jumpPositivo(this.valorBooleano(auxiliar.nextInt()));
             
             palavraControle.lerIR(this.valorBooleano(auxiliar.nextInt()));
+            palavraControle.lerIRP1(this.valorBooleano(auxiliar.nextInt()));
             
             palavraControle.enderecoJump(auxiliar.nextInt());
             

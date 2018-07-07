@@ -24,43 +24,14 @@ public class PalavraControle {
     //private boolean jumpOverflow;
     
     private boolean lerIR;
+    private boolean lerIRP1;
     private int enderecoJump;
-    
-    // DEBUGG
-    public int valor(boolean a) {
-        if(a)
-            return 1;
-        else
-            return 0;
-    }
     
     public String valorString(boolean status) {
         if(status)
             return "1";
         else
             return "0";
-    }
-    
-    public void imprimir() {
-        System.out.print(valor(flagEntradaP1) + " ");
-        System.out.print(valor(flagSaidaP1) + " ");
-        System.out.print(valor(flagSaidaP2) + "   ");
-        
-        sinaisDeControle.stream().forEach((sinal) -> {
-            System.out.print(valor(sinal) + " ");
-        });
-        
-        System.out.print("  " + codigoOperacaoULA + "   " + codigoOperacaoRAM + "   ");
-        
-        System.out.print(valor(jumpIncondicional) + " ");
-        System.out.print(valor(jumpZero) + " ");
-        System.out.print(valor(jumpNegativo) + " ");
-        System.out.print(valor(jumpPositivo) + " ");
-        //System.out.print(v(jumpOverflow) + "   ");
-        
-        System.out.print(valor(lerIR) + "   ");
-        
-        System.out.println(enderecoJump);
     }
     
     public PalavraControle(int numeroSinaisControle) {
@@ -267,6 +238,25 @@ public class PalavraControle {
         return this.lerIR;
     }
 
+    /**
+     * Setter para a flag de leitura do proximo endereco
+     * 
+     * @param status Valor boolean da flag
+     */
+    public void lerIRP1(boolean status) {
+        this.lerIRP1 = status;
+    }
+    
+    /**
+     * Getter para a flag de leitura do proximo endereco
+     * 
+     * @return 'true' caso seja necessario ler do IRP1 o proximo endereco,
+     *         'false' caso nao seja.
+     */
+    public boolean lerIRP1() {
+        return this.lerIRP1;
+    }
+    
     /**
      * Setter para o endereco para a proxima instrucao em caso de jump
      * 

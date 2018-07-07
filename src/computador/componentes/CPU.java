@@ -306,7 +306,6 @@ public class CPU {
             // Barramento --(00)--> ULA
             this.barramento.definirComoOrigem(conexao);            
             this.ULA.definirComoDestino(conexao);
-            System.out.println("BARRAMENTO -> ULA " + conexao);
             UC.registrarConexao(conexao, 9);
         }
         

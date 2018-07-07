@@ -70,7 +70,7 @@ public class Computador {
         System.out.print("Palavra Controle:");
         for(String s : statusCPU.getPalavraControle())
             System.out.print(" " + s);
-        System.out.println();
+        System.out.println("\n");
     }
     
     public static void main(String[] args) {
@@ -86,8 +86,9 @@ public class Computador {
         }
         
         int[][] programa = {
-            {0,0,1,0,1,  0,1,1,1,1,  0,0,0,1,0,1}, // MOV [15],5
-            {0,0,0,1,0,  1,0,1,1,1,  0,0,1,1,1,1}  // MOV CX,[15]
+            {0,0,0,0,1,  1,0,0,1,1,  0,0,0,0,1,1},  // MOV AX,1
+            {0,0,0,0,1,  1,0,1,0,1,  0,0,0,0,0,1},  // MOV BX,1
+            {0,0,1,1,1,  1,0,0,1,1,  0,1,0,1,0,1},  // SUB AX,BX
         };
         
         StatusCPU status = computador.getStatusCPU();
@@ -99,7 +100,7 @@ public class Computador {
                 computador.executar();
                 IMPRIMIRTEMPORARIO(status);        
             } catch(Exception e) {
-                System.out.println("\nDeu erro! Hora de parar!\n");
+                System.out.println("\nDeu erro! Hora de parar!\n" + e.getMessage());
                 break;
             }
         } while(true);

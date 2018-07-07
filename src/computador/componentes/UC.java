@@ -82,7 +82,7 @@ public class UC {
     }
     
     public int portaDecoder(int porta, boolean entrada) {
-        System.out.println("VALOR SENDO SUUUITADO: " + porta + " ---------------");
+        
         switch (porta) {
     
             case 19: // AX
@@ -110,7 +110,6 @@ public class UC {
                     return 24;
             
             default:
-                System.out.println("Deu ruim ao abrir a porta: " + porta);
                 return -1;
         }
     }
@@ -158,6 +157,7 @@ public class UC {
         if(this.CBR.operacaoRAM() != this.memoriaPrimaria.codigoOperacaoLer())
             this.memoriaPrimaria.operar(this.CBR.operacaoRAM());
         
+        // Define o endereco de JUMP de acordo com o OPCODE
         if(this.CBR.lerIR()) {
             int enderecoInstrucao = Binario.valorInteiro(this.IR.ler(0));
             this.CBR.enderecoJump(this.firmware.enderecoInstrucao(enderecoInstrucao));
@@ -166,10 +166,19 @@ public class UC {
             this.portaSaidaP1 = portaDecoder(Binario.valorInteiro(this.IR.ler(1)), false);
             this.portaSaidaP2 = portaDecoder(Binario.valorInteiro(this.IR.ler(2)), false);
         }
+        
+        // Define o endereco de JUMP igual ao parametro 1 no IR
+        if(this.CBR.lerIRP1())
+            this.CBR.enderecoJump(Binario.valorInteiro(this.IR.ler(1)));
             
         // ARRUMAR ESSES JUMPS PARA CHECAREM A ULA
-        if(this.CBR.jumpIncondicional() || this.CBR.jumpZero() || 
-                this.CBR.jumpNegativo() || this.CBR.jumpPositivo())
+        if(this.CBR.jumpIncondicional())
+            this.CAR = this.CBR.enderecoJump();
+        else if(this.CBR.jumpZero() && this.ULA.flagZero())
+            this.CAR = this.CBR.enderecoJump();
+        else if(this.CBR.jumpNegativo() && !this.ULA.sinalPositivo())
+             this.CAR = this.CBR.enderecoJump();   
+        else if(this.CBR.jumpPositivo() && !this.ULA.sinalPositivo() && !this.ULA.flagZero())
             this.CAR = this.CBR.enderecoJump();
         else
             this.CAR++;
