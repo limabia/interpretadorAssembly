@@ -4,6 +4,7 @@ import computador.Interpretador;
 import computador.Computador;
 import static computador.Computador.IMPRIMIRTEMPORARIO;
 import computador.componentes.StatusCPU;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,6 +32,23 @@ public class CatWoman extends javax.swing.JFrame {
         pararExecucao.setEnabled(false);
     }
 
+    
+    private void printaTela(StatusCPU status){
+        try{
+            valorAX.setText(status.getValorAX());
+            valorBX.setText(status.getValorBX());
+            valorCX.setText(status.getValorCX());
+            valorDX.setText(status.getValorDX());
+            valorPC.setText(status.getValorPC());
+            valorIR.setText(status.getValorIR());
+            valorMAR.setText(status.getValorMAR());
+            valorMBR.setText(status.getValorMBR());
+            valorT.setText(status.getValorT());
+            valorAC.setText(status.getValorAC());
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(null,"Erro ao preencher os valores na tela: " + e.getMessage());
+        }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -303,23 +321,13 @@ public class CatWoman extends javax.swing.JFrame {
             computador = new Computador(16);
         } catch(Exception e) {
             e.printStackTrace();
-            System.out.println("Erro ao iniciar o computador: " + e.getMessage());
-            System.exit(1);
+            JOptionPane.showMessageDialog(null,"Erro ao iniciar o computador: " + e.getMessage());
         }
         
         computador.escreverPrograma(codigoBin);
         computador.executar();
         StatusCPU status = computador.getStatusCPU();
-        valorAX.setText(status.getValorAX());
-        valorBX.setText(status.getValorBX());
-        valorCX.setText(status.getValorCX());
-        valorDX.setText(status.getValorDX());
-        valorPC.setText(status.getValorPC());
-        valorIR.setText(status.getValorIR());
-        valorMAR.setText(status.getValorMAR());
-        valorMBR.setText(status.getValorMBR());
-        valorT.setText(status.getValorT());
-        valorAC.setText(status.getValorAC());
+        printaTela(status);
         
         //IMPRIMIRTEMPORARIO(status);
         proximaPalavra.setEnabled(true);
@@ -333,7 +341,7 @@ public class CatWoman extends javax.swing.JFrame {
             StatusCPU status = computador.getStatusCPU();
             IMPRIMIRTEMPORARIO(status);        
         } catch(Exception e) {
-            System.out.println("\nDeu erro! Hora de parar!\n");
+            JOptionPane.showMessageDialog(null,"Erro, hora de parar!");
         }
     }//GEN-LAST:event_proximaPalavraActionPerformed
 
