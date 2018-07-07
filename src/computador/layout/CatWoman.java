@@ -8,7 +8,11 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author bianca
+ * Ana Paula Silva de Souza 10391225
+ * Bianca Lima Santos 10346811
+ * Marcelo Torres do Ó 10414571
+ * Mariana Silva Santana 10258897
+ * 
  */
 public class CatWoman extends javax.swing.JFrame {
     

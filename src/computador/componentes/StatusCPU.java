@@ -56,11 +56,11 @@ public class StatusCPU {
     
     
     public String getValorIR() {
-        return IR.toString();
+        return IR.toString() + "   Flag ULA Zero: " + this.ULA.flagZero();
     }
     
     public String getValorPC() {
-        return PC.toString();
+        return PC.toString() + "   Flag ULA Sinal Positivo: " + this.ULA.sinalPositivo();
     }
     
     
@@ -74,7 +74,7 @@ public class StatusCPU {
     
     
     public String getValorMAR() {
-        return MAR.toString();
+        return MAR.toString() + "    Flag ILA Sinal Negativo: " + this.ULA.sinalNegativo();
     }
     
     public String getValorMBR() {
